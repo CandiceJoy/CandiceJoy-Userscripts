@@ -13,6 +13,11 @@
 // @run-at document-idle
 // ==/UserScript==
 
+//--== User Editable ==--
+const currency = "usd";
+const refreshSeconds = 15; //seconds
+//--== End User Editable ==--
+
 const observerConfig = {
 	childList: true, subtree: true, attributes: true
 };
@@ -21,10 +26,10 @@ const buttonSelector = 'button.btn-cart[style=""]';
 const priceSelector = '.item-detail__price_selling-price';
 const observer = new MutationObserver(observerFunc);
 const buyText = "add to cart";
-const refreshSeconds = 15; //seconds
+
 const priceThreshold = 10000;
 const refreshTimer = refreshSeconds * 1000;
-const currency = "usd";
+
 const timeout = setTimeout(function()
                            {
 	                           location.reload();
@@ -109,14 +114,12 @@ function observerFunc(mutations)
 	var done1 = false;
 	var done2 = false;
 
-	mutations.forEach((mutation) =>
+	mutations.forEach(() =>
 	                  {
 		                  if(done1 && done2)
 		                  {
 			                  return;
 		                  }
-
-		                  var nodes = mutation.addedNodes;
 
 		                  if(!done1)
 		                  {
