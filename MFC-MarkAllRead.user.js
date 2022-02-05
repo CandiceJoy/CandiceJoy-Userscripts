@@ -9,9 +9,6 @@
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @antifeature ads Never any ads
-// @antifeature tracking Never any tracking
-// @antifeature miner Never any mining
 // @grant        none
 // ==/UserScript==
 

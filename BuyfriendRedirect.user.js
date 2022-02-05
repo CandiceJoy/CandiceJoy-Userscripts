@@ -9,9 +9,6 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=amiami.com
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/BuyfriendRedirect.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @antifeature ads Never any ads
-// @antifeature tracking Never any tracking
-// @antifeature miner Never any mining
 // @grant        none
 // ==/UserScript==
 

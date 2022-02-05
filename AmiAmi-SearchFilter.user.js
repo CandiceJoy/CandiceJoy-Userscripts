@@ -12,9 +12,6 @@
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @antifeature ads Never any ads
-// @antifeature tracking Never any tracking
-// @antifeature miner Never any mining
 // @run-at document-idle
 // ==/UserScript==
 /*
