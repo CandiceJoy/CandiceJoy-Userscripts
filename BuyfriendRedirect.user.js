@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BuyFriend Redirect
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Auto-clicker for Buyfriend.Moe notifications
 // @author       CandiceJoy
 // @match        https://buyfriend.moe/search?search=https://www.amiami.com/eng/detail/?*

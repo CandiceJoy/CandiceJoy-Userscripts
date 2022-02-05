@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AmiAmi Search Filter
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Search assistant for AmiAmi
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/search/list/*

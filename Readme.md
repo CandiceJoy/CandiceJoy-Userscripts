@@ -1,7 +1,7 @@
 # CandiceJoy's Userscripts
 
 ## Instructions
->If you have suggestions, please submit them as issues and I'll do what I can ^_^*
+>If you have suggestions, please submit them as issues and I'll do what I can ^_^
 
 Download your userscript manager of choice, then click the links for the userscripts you want to install :)  
 Chrome: [TamperMonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)  

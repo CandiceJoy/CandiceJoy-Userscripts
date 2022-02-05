@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MFC Mark All As Read
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Adds a Mark All Read button to MFC Notifications Page
 // @author       CandiceJoy
 // @match        https://myfigurecollection.net/notifications/*
