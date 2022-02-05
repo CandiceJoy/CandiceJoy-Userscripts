@@ -1,0 +1,135 @@
+// ==UserScript==
+// @name         AmiAmi Waiter
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  try to take over the world!
+// @author       CandiceJoy
+// @match        https://www.amiami.com/eng/detail/*
+// @icon         https://www.google.com/s2/favicons?domain=amiami.com
+// @grant        none
+// @require      http://code.jquery.com/jquery-3.4.1.min.js
+// @run-at document-idle
+// ==/UserScript==
+
+const observerConfig = {
+	childList: true, subtree: true, attributes: true
+};
+
+const buttonSelector = 'button.btn-cart[style=""]';
+const priceSelector = '.item-detail__price_selling-price';
+const observer = new MutationObserver(observerFunc);
+const buyText = "add to cart";
+const refreshSeconds = 15; //seconds
+const priceThreshold = 10000;
+const refreshTimer = refreshSeconds * 1000;
+const currency = "usd";
+const timeout = setTimeout(function()
+                           {
+	                           location.reload();
+                           }, refreshTimer);
+
+(function()
+{
+	'use strict';
+
+	observer.observe(document.querySelector("body"), observerConfig);
+})();
+
+function jancodeLink()
+{
+	//console.log(nodes);
+	var ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
+
+	if(ele.length > 0)
+	{
+		var jancode = ele.text();
+
+		if(jancode !== undefined && jancode !== null && jancode.trim() !== "")
+		{
+			var url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
+			$(ele).html(`<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>`);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function getPrice()
+{
+	return parseInt($(priceSelector).text().replace("JPY", "").replace(",", ""));
+}
+
+function cartButton()
+{
+	var cartButton = $(document).find(buttonSelector);
+
+	if(cartButton !== undefined && cartButton !== null)
+	{
+		if(getPrice() > priceThreshold)
+		{
+			clearTimeout(timeout);
+			console.log("Price too high, not auto-clicking");
+		}
+		else
+		{
+			console.log("CLICK");
+			$(cartButton).click();
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+function currencyConversion()
+{
+	$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
+	 .always(function(data)
+	         {
+		         var conversionFactor = $(data).attr(currency);
+		         var newPrice = parseFloat(conversionFactor) * getPrice();
+		         var formatter = new Intl.NumberFormat('en-US', {
+			         style: 'currency', currency: currency.toUpperCase()
+		         });
+		         var finalPrice = formatter.format(newPrice);
+
+		         if(finalPrice != undefined)
+		         {
+			         $(document).find(".item-detail__price_selling-price").text(finalPrice);
+		         }
+	         });
+}
+
+function observerFunc(mutations)
+{
+	var done1 = false;
+	var done2 = false;
+
+	mutations.forEach((mutation) =>
+	                  {
+		                  if(done1 && done2)
+		                  {
+			                  return;
+		                  }
+
+		                  var nodes = mutation.addedNodes;
+
+		                  if(!done1)
+		                  {
+			                  done1 = jancodeLink();
+		                  }
+		                  if(!done2)
+		                  {
+			                  done2 = cartButton();
+		                  }
+
+		                  if(done1 && done2)
+		                  {
+			                  currencyConversion();
+			                  observer.disconnect();
+		                  }
+	                  });
+}
+
