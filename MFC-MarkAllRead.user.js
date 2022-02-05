@@ -2,11 +2,16 @@
 // @name         MFC Mark All As Read
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  try to take over the world!
+// @description  Adds a Mark All Read button to MFC Notifications Page
 // @author       CandiceJoy
 // @match        https://myfigurecollection.net/notifications/*
 // @icon         https://static.myfigurecollection.net/ressources/assets/webicon.png
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
+// @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
+// @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
+// @antifeature ads Never any ads
+// @antifeature tracking Never any tracking
+// @antifeature miner Never any mining
 // @grant        none
 // ==/UserScript==
 

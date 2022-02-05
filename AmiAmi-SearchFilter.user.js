@@ -2,7 +2,7 @@
 // @name         AmiAmi Search Filter
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  try to take over the world!
+// @description  Search assistant for AmiAmi
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/search/list/*
 // @icon         https://www.google.com/s2/favicons?domain=amiami.com
@@ -10,6 +10,11 @@
 // @grant              GM_setValue
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
+// @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
+// @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
+// @antifeature ads Never any ads
+// @antifeature tracking Never any tracking
+// @antifeature miner Never any mining
 // @run-at document-idle
 // ==/UserScript==
 /*

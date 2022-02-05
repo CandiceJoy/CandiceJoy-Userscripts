@@ -2,12 +2,17 @@
 // @name         AmiAmi Refresher
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  try to take over the world!
+// @description  AmiAmi Refresher / Auto-Add-To-Cart
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/detail/*
 // @icon         https://www.google.com/s2/favicons?domain=amiami.com
 // @grant        none
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
+// @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
+// @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
+// @antifeature ads Never any ads
+// @antifeature tracking Never any tracking
+// @antifeature miner Never any mining
 // @run-at document-idle
 // ==/UserScript==
 
