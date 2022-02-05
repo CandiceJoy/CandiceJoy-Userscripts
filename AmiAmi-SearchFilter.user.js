@@ -10,7 +10,6 @@
 // @grant              GM_setValue
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
-// @require      file://C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts\AmiAmiSearchFilter.js
 // @run-at document-idle
 // ==/UserScript==
 /*

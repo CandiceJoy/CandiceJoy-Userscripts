@@ -1,8 +1,8 @@
 # CandiceJoy's Userscripts
 
-##Instructions for use
+## Instructions for use
 
-###Chrome
+### Chrome
 1. Install [TamperMonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 2. Install the userscripts below
 3. Profit
