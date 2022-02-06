@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BuyFriend Redirect
-// @namespace    http://tampermonkey.net/
+// @namespace    http://candicejoy.com/
 // @version      1.1
 // @description  Auto-clicker for Buyfriend.Moe notifications
 // @author       CandiceJoy
