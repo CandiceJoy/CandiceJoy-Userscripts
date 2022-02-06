@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AmiAmi Search Filter
-// @namespace    http://tampermonkey.net/
+// @namespace    http://candicejoy.com/
 // @version      1.1
 // @description  Search assistant for AmiAmi
 // @author       CandiceJoy
