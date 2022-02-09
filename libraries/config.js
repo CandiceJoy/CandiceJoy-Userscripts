@@ -1,4 +1,4 @@
-const exists = typeof GMConfig !== "undefined";
+const exists = typeof GM_config != "undefined";
 const types = ["number", "int", "integer", "float", "text", "textarea", "select", "button", "checkbox", "radio", "hidden"];
 const allowedProperties = {
 	all: ["title", "labelPos"],
@@ -21,6 +21,7 @@ function checkProperty( type, key )
 		throw "Invalid property '" + key + "'; allowed properties are: " + allowableProperties;
 	}
 }
+//event open: document, window, frame
 
 class Config
 {
@@ -30,6 +31,11 @@ class Config
 		this.title = title;
 		this.fields = new Array();
 		this.events = new Array();
+	}
+
+	add( name, label, typeIn, defaultValue, properties = null )
+	{
+		this.addField( name, label, typeIn, defaultValue, properties);
 	}
 
 	addField(name, label, typeIn, defaultValue, properties = null)
@@ -71,6 +77,11 @@ class Config
 		field.properties[key] = value;
 	}
 
+	event(name,callback)
+	{
+		this.addEvent(name,callback);
+	}
+
 	addEvent(name, callback)
 	{
 		if(!name)
@@ -105,7 +116,11 @@ class Config
 
 			fieldObject.label = field.label;
 			fieldObject.type = field.type;
-			fieldObject.default = field.defaultValue;
+
+			if( field.defaultValue !== null && field.defaultValue !== undefined )
+			{
+				fieldObject.default = field.defaultValue;
+			}
 
 			for(let propertyName in field.properties)
 			{
@@ -121,6 +136,12 @@ class Config
 
 	generateEvents()
 	{
+		if( this.events.length <= 0 )
+		{
+			return null;
+		}
+
+		let hasEvents = false;
 		let eventsObject = new Object();
 
 		for(let i in this.events)
@@ -129,6 +150,7 @@ class Config
 			let eventObject = new Object();
 
 			eventsObject[event.event] = event.callback;
+			hasEvents = true;
 		}
 
 		return eventsObject;
@@ -162,11 +184,14 @@ class Config
 		else
 		{
 			console.log("GM_config init");
+			console.log( "As Object\n--------");
 			console.log(configObject);
+			console.log( "As raw\n------");
+			console.log( JSON.stringify(configObject) );
 		}
 	}
 
-	show()
+	async show()
 	{
 		if(exists)
 		{
@@ -176,6 +201,19 @@ class Config
 		{
 			console.log("GM_config open");
 		}
+
+		this.frame = GM_config.frame;
+
+		return new Promise(
+			resolve=>{
+				this.frame.onload = function() {
+					console.log("FRAME: "+this.frame);
+					this.document = this.frame.contentDocument;
+					this.window = this.frame.contentWindow;
+					resolve();
+				}.bind(this);
+			}
+		);
 	}
 
 	get(name)
@@ -205,7 +243,7 @@ class ConfigEvent
 
 class ConfigField
 {
-	constructor(name, label, type, defaultValue, properties = null)
+	constructor(name, label, type, defaultValue = null, properties = null)
 	{
 		this.name = name;
 		this.label = label;
@@ -214,22 +252,17 @@ class ConfigField
 
 		if(!name)
 		{
-			throw "Name required";
+			throw "Name required for " + name;
 		}
 
 		if(!label)
 		{
-			throw "Label required";
+			throw "Label required for " + name;
 		}
 
 		if(!type)
 		{
-			throw "Type required";
-		}
-
-		if(!defaultValue)
-		{
-			throw "Default value required";
+			throw "Type required for " + name;
 		}
 
 		if(!types.includes(type))
@@ -250,10 +283,21 @@ class ConfigField
 	}
 }
 
-let config = new Config("id", "title");
-config.addField("name", "label", "text", "defaultValue", {size: 10});
-config.addField("name2", "label2", "text", "defaultValue2");
-config.setProperty( "name2", "size", 12);
-config.addEvent("open", console.log);
-config.addEvent("open", parseInt);
-config.init();
+/* Example
+
+ const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
+ const boxConditions = ["A", "B", "C", "N"];
+ let configDoc;
+
+ let config = new Config("amiami-search-filter","AmiAmi Search Filter Config");
+ config.add("currency","Currency (3 Letters): ","text","usd",{size:3});
+ config.add("allowedItemConditions","Lowest Allowed Item Condition: ","select","B",{options:itemConditions});
+ config.add("allowedBoxConditions","Lowest Allowed Box Condition: ","select","B",{options:boxConditions});
+ config.add("priceThreshold", "Hide items above this price (JPY): ", "int", "10000" );
+ config.add("highlightPrice", "Highlight items below or equal to this price (JPY): ", "int", "10000" );
+ config.add("exclude", "List of search terms to hide (one per line): ", "textarea", "" );
+ config.add("dontExclude", "List of search terms to exclude from price and condition filters (one per line): ", "textarea", "" );
+ config.init();
+ await config.show(); //If you don't await, config.frame, config.document, and config.window will not be properly populated; if you're not going to use those variables, await is not needed
+ $(config.document).find("div").css("color", "green"); //Example of changing the frame's document using jQuery
+ */
