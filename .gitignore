@@ -1,7 +1,4 @@
-*
-!.gitignore
-!AmiAmi-Refresher.user.js
-!AmiAmi-SearchFilter.user.js
-!MFC-MarkAllRead.user.js
-!BuyfriendRedirect.user.js
-!Readme.md
+.idea
+dev
+node_modules
+test.*

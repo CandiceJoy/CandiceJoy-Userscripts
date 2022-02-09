@@ -1,0 +1,36 @@
+{
+  "name": "candicejoy-userscripts",
+  "version": "1.0.0",
+  "description": "## Instructions >If you have suggestions, please submit them as issues and I'll do what I can ^_^",
+  "main": "AmiAmi-Refresher.user.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bluebird": "^3.7.2",
+    "debug": "^3.1.0",
+    "follow-redirects": "^1.5.10",
+    "gulp": "^4.0.2",
+    "gulp-change": "^1.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-if": "^3.0.0",
+    "gulp-inject-string": "^1.1.2",
+    "gulp-livereload": "^4.0.2",
+    "gulp-preprocess": "^4.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-watch": "^5.0.1",
+    "ms": "^2.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CandiceJoy/CandiceJoy-Userscripts.git"
+  },
+  "author": "CandiceJoy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues"
+  },
+  "homepage": "https://github.com/CandiceJoy/CandiceJoy-Userscripts#readme"
+}
