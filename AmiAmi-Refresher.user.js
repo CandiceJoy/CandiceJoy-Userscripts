@@ -12,6 +12,7 @@
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @run-at document-idle
 // ==/UserScript==
+/*jshint esversion: 8 */
 
 //--== User Editable ==--
 const currency = "usd";

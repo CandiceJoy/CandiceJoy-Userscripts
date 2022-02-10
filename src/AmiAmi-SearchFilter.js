@@ -16,12 +16,14 @@
 // @if BUILD_TYPE="PC"
 // @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @endif
-// @if BUILD_TYPE="PROD"
+// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @endif
 // @run-at document-idle
 // ==/UserScript==
+// @if BUILD_TYPE="Prod"
+/*jshint esversion: 8 */
 /*
  Condition Rank of the products.
 
@@ -39,7 +41,7 @@
  C: Box is clearly damaged.
  N: No box/packaging is included. (item is loose)
  */
-
+// !!!!!!!include ../libraries/config.js
 const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
 const boxConditions = ["A", "B", "C", "N"];
 var configDoc;
@@ -175,8 +177,8 @@ const pagerSelector = ".pager_mb,.pager-list";
 const pagerNumSelector = "li.pager-list__item_num";
 const gcodeSelector = "a";
 const gcodeID = "gcode";
-const itemConditionRegex = /ITEM:(.*?)\//id;
-const boxConditionRegex = /BOX:(.*?)\)/id;
+const itemConditionRegex = "/ITEM:(.*?)\//id";
+const boxConditionRegex = "/BOX:(.*?)\)/id";
 const orderClosed = "order closed";
 
 const observerConfig = {
@@ -220,11 +222,11 @@ class Item
 		this.scode = item["scode"];
 		this.mfc = "https://myfigurecollection.net/browse.v4.php?keywords=" + this.jancode;
 		this.sname = item["sname"];
-		this.itemCondition = itemConditionRegex.exec(item["sname"])[1];
-		this.boxCondition = boxConditionRegex.exec(item["sname"])[1];
+		this.itemCondition = new RegExp(itemConditionRegex).exec(item["sname"])[1];
+		this.boxCondition = new RegExp(boxConditionRegex).exec(item["sname"])[1];
 
-		var ele = this.element;
-		var tags = $(ele).find(
+		let ele = this.element;
+		let tags = $(ele).find(
 			".newly-added-items__item__tag-list__item:not([style]), .newly-added-items__item__tag-list__item[style='']");
 
 		$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
@@ -519,3 +521,5 @@ function update(node)
 		                                item.element = this;
 	                                });
 }
+
+// @endif

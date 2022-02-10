@@ -1,4 +1,4 @@
 .idea
-dev
+dev*
 node_modules
-test.*
+test*

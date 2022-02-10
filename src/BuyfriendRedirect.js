@@ -19,6 +19,8 @@
 // @endif
 // @grant        none
 // ==/UserScript==
+// @if BUILD_TYPE="Prod"
+/*jshint esversion: 8 */
 
 const logo = "amiamilogo.png";
 
@@ -38,3 +40,4 @@ const logo = "amiamilogo.png";
 		               location.href = $(this).attr("href");
 	               });
 })();
+// @endif

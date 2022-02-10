@@ -20,6 +20,8 @@
 // @endif
 // @run-at document-idle
 // ==/UserScript==
+// @if BUILD_TYPE="Prod"
+/*jshint esversion: 8 */
 
 //--== User Editable ==--
 const currency = "usd";
@@ -146,3 +148,4 @@ function observerFunc(mutations)
 	                  });
 }
 
+// @endif

@@ -11,6 +11,7 @@
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @grant        none
 // ==/UserScript==
+/*jshint esversion: 8 */
 
 const logo = "amiamilogo.png";
 

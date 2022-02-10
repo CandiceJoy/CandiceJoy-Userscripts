@@ -19,6 +19,8 @@
 // @endif
 // @grant        none
 // ==/UserScript==
+// @if BUILD_TYPE="Prod"
+/*jshint esversion: 8 */
 
 const headerSelector = "#main";
 const activitySelector = ".activity-wrapper";
@@ -41,3 +43,5 @@ function buttonClicked(event)
 		                                                           $(this).click();
 	                                                           });
 }
+
+// @endif
