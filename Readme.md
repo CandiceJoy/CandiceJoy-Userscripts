@@ -54,9 +54,11 @@ Firefox: [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemon
 ----
 1. Install gulp and all reqs from package.json
 2. There are three tasks - Build Dev PC, Build Dev Mac, and Build Prod
-   1. Build Dev PC - Sets DEV to true, PROD to false, and DEV_TYPE to "PC" for preprocessing; output goes to dev/
-   2. Build Dev Mac - Sets DEV to true, PROD to false, and DEV_TYPE to "Mac" for preprocessing; output goes to dev/
-   3. Build Prod - Sets DEV to false, PROD to true, and DEV_TYPE to "None" for preprocessing; output goes to "."
-3. Edit the source files to use the correct path if building for dev (the version in the repo is what I use) OR copy the end-user version into your userscript manager OR build dev, copy the dev header, and change the path in your userscript manager
+   1. Build Dev PC - Sets BUILD_TYPE to "PC"; output goes to dev/
+   2. Build Dev Mac - Sets BUILD_TYPE to "Mac"; output goes to dev/
+   3. Build Prod - Sets BUILD_TYPE to "Prod"; output goes to "."
+3. Edit the source files to use the correct path if building for dev (the version in the repo is what I use) OR copy the
+   end-user version into your userscript manager OR build dev, copy the dev header, and change the path in your
+   userscript manager
 4. Run the task to build the file you want.
 5. Do not submit pull requests with changes to the paths in the source headers unless there's a bug in them in the end-user version

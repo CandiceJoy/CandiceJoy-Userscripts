@@ -10,15 +10,13 @@
 // @grant              GM_setValue
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
-// @ifdef DEV
-// @if DEV_TYPE="Mac"
+// @if BUILD_TYPE="Mac"
 // @require file:///Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @endif
-// @if DEV_TYPE="PC"
-// bnanana@require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
+// @if BUILD_TYPE="PC"
+// @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @endif
-// @endif
-// @ifdef PROD
+// @if BUILD_TYPE="PROD"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @endif
@@ -226,7 +224,8 @@ class Item
 		this.boxCondition = boxConditionRegex.exec(item["sname"])[1];
 
 		var ele = this.element;
-		var tags = $(ele).find(".newly-added-items__item__tag-list__item:visible");
+		var tags = $(ele).find(
+			".newly-added-items__item__tag-list__item:not([style]), .newly-added-items__item__tag-list__item[style='']");
 
 		$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
 		 .always(function(data)
@@ -395,12 +394,11 @@ class Item
 	}
 }
 
-main:
-	(function()
-	{
-		'use strict';
-		observer.observe(document.querySelector("body"), observerConfig);
-	})();
+(function()
+{
+	'use strict';
+	observer.observe(document.querySelector("body"), observerConfig);
+})();
 
 function observerFunc(mutations)
 {
@@ -422,7 +420,7 @@ function observerFunc(mutations)
 		                  }
 		                  else
 		                  {
-			                  return;
+
 		                  }
 	                  });
 }

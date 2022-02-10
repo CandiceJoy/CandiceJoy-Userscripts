@@ -10,15 +10,13 @@
 // @icon         https://www.google.com/s2/favicons?domain=amiami.com
 // @grant        none
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @ifdef DEV
-// @if DEV_TYPE="Mac"
+// @if BUILD_TYPE="Mac"
 // @require file:///Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
 // @endif
-// @if DEV_TYPE="PC"
-// bnanana@require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
+// @if BUILD_TYPE="PC"
+// @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
 // @endif
-// @endif
-// @ifdef PROD
+// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @endif

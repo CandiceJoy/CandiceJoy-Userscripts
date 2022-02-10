@@ -8,17 +8,17 @@ let dev = "dev/";
 gulp.task('Build - Dev (Mac)', function()
 {
 	return gulp.src(source)
-	           .pipe(preprocess({context:{DEV:true,PROD:false,DEV_TYPE:"Mac"}}))
+	           .pipe(preprocess({context: {BUILD_TYPE: "Mac"}}))
 	           .pipe(rename({
 		                        extname: ".user.js"
 	                        }))
-		.pipe(gulp.dest(dev));
+	           .pipe(gulp.dest(dev));
 });
 
 gulp.task('Build - Dev (PC)', function()
 {
 	return gulp.src(source)
-	           .pipe(preprocess({context:{DEV:true,PROD:false,DEV_TYPE:"PC"}}))
+	           .pipe(preprocess({context: {BUILD_TYPE: "PC"}}))
 	           .pipe(rename({
 		                        extname: ".user.js"
 	                        }))
@@ -28,7 +28,7 @@ gulp.task('Build - Dev (PC)', function()
 gulp.task('Build - Prod', function()
 {
 	return gulp.src(source)
-	           .pipe(preprocess({context:{DEV:false,PROD:true,DEV_TYPE:"None"}}))
+	           .pipe(preprocess({context: {BUILD_TYPE: "Prod"}}))
 	           .pipe(rename({
 		                        extname: ".user.js"
 	                        }))
