@@ -16,7 +16,7 @@ class Log
 {
 	constructor(levelIn = null, nameIn = null, callbackIn = null, settings = null)
 	{
-		this.loggers = new Array();
+		this.loggers = [];
 
 		if(callbackIn === null)
 		{
@@ -69,7 +69,7 @@ class Log
 			settings = defaultLoggerSettings;
 		}
 
-		let logger = new Object();
+		let logger = {};
 		logger.name = name;
 		logger.callback = callback;
 		logger.level = level;
@@ -130,9 +130,9 @@ class Log
 		let logger = this.createLogger(callbackIn, level, nameIn, settings);
 		this.loggers.push(logger);
 
-		if(settings["init"])
+		if(settings.init)
 		{
-			this.output(logInitMessage.replaceAll("$",nameIn), logInitMessageLevel);
+			this.output(logInitMessage.replaceAll("$", nameIn), logInitMessageLevel);
 		}
 	}
 
@@ -284,22 +284,22 @@ class Log
 
 		let timestamp = "";
 
-		if(settings["date"])
+		if(settings.date)
 		{
 			timestamp += `${year}-${month}-${day}`;
 		}
 
-		if(settings["time"])
+		if(settings.time)
 		{
 			timestamp += ` ${hour}:${minute}:${second} ${ampm}`;
 		}
 
-		if(settings["timezone"])
+		if(settings.timezone)
 		{
 			timestamp += ` UTC${timezone}`;
 		}
 
-		if(settings["millis"])
+		if(settings.millis)
 		{
 			timestamp += ` @${milli}`;
 		}
@@ -312,17 +312,17 @@ class Log
 		let header = "";
 		let settings = logger.settings;
 
-		if(settings["timestamp"])
+		if(settings.timestamp)
 		{
 			header += "[" + this.getTimestamp(logger) + "]";
 		}
 
-		if(settings["name"])
+		if(settings.name)
 		{
 			header += ` (${logger.name})`;
 		}
 
-		if(settings["level"])
+		if(settings.level)
 		{
 			header += ` ${level}`;
 		}

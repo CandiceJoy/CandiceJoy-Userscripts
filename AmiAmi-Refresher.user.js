@@ -12,8 +12,7 @@
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @run-at document-idle
 // ==/UserScript==
-/*jshint esversion: 8 */
-
+"use strict";
 //--== User Editable ==--
 const currency = "usd";
 const refreshSeconds = 15; //seconds
@@ -26,7 +25,7 @@ const observerConfig = {
 const buttonSelector = 'button.btn-cart[style=""]';
 const priceSelector = '.item-detail__price_selling-price';
 const observer = new MutationObserver(observerFunc);
-const buyText = "add to cart";
+//const buyText = "add to cart";
 
 const priceThreshold = 10000;
 const refreshTimer = refreshSeconds * 1000;
@@ -38,23 +37,21 @@ const timeout = setTimeout(function()
 
 (function()
 {
-	'use strict';
-
 	observer.observe(document.querySelector("body"), observerConfig);
 })();
 
 function jancodeLink()
 {
 	//console.log(nodes);
-	var ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
+	let ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
 
 	if(ele.length > 0)
 	{
-		var jancode = ele.text();
+		let jancode = ele.text();
 
 		if(jancode !== undefined && jancode !== null && jancode.trim() !== "")
 		{
-			var url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
+			let url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
 			$(ele).html(`<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>`);
 			return true;
 		}
@@ -70,7 +67,7 @@ function getPrice()
 
 function cartButton()
 {
-	var cartButton = $(document).find(buttonSelector);
+	let cartButton = $(document).find(buttonSelector);
 
 	if(cartButton !== undefined && cartButton !== null)
 	{
@@ -96,12 +93,12 @@ function currencyConversion()
 	$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
 	 .always(function(data)
 	         {
-		         var conversionFactor = $(data).attr(currency);
-		         var newPrice = parseFloat(conversionFactor) * getPrice();
-		         var formatter = new Intl.NumberFormat('en-US', {
+		         let conversionFactor = $(data).attr(currency);
+		         let newPrice = parseFloat(conversionFactor) * getPrice();
+		         let formatter = new Intl.NumberFormat('en-US', {
 			         style: 'currency', currency: currency.toUpperCase()
 		         });
-		         var finalPrice = formatter.format(newPrice);
+		         let finalPrice = formatter.format(newPrice);
 
 		         if(finalPrice != undefined)
 		         {
@@ -112,8 +109,8 @@ function currencyConversion()
 
 function observerFunc(mutations)
 {
-	var done1 = false;
-	var done2 = false;
+	let done1 = false;
+	let done2 = false;
 
 	mutations.forEach(() =>
 	                  {

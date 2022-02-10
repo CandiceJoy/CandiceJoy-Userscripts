@@ -1,0 +1,16 @@
+{
+  "extends"      : "eslint:recommended",
+  "rules"        : {
+	"no-mixed-spaces-and-tabs": "off",
+	"require-await"           : "error"
+  },
+  "parserOptions": {
+	"ecmaVersion": 8,
+	"sourceType" : "script"
+  },
+  "env"          : {
+	"browser": true,
+	"es6"    : true,
+	"jquery" : true
+  }
+}

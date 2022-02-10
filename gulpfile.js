@@ -1,9 +1,12 @@
+/* eslint-env node */
+"use strict";
 const gulp = require('gulp');
 const preprocess = require('gulp-preprocess');
 const rename = require('gulp-rename');
 const jshint = require('gulp-jshint');
 const ts = require('gulp-typescript');
-const gulpESLintNew = require('gulp-eslint-new');
+//const gulpESLintNew = require('gulp-eslint-new');
+const debug = require('gulp-debug');
 const js_source = "src/*.js";
 const ts_source = "src/*.ts";
 const prod = ".";
@@ -26,13 +29,16 @@ function lint(callback)
 function doBuild(dest, buildType, callback)
 {
 	gulp.src(js_source)
+	    .pipe(debug({title: "JS In", showCount: false}))
 	    .pipe(preprocess({context: {BUILD_TYPE: buildType}}))
 	    .pipe(rename({
 		                 extname: ".user.js"
 	                 }))
-	    .pipe(gulp.dest(dest));
+	    .pipe(gulp.dest(dest))
+	    .pipe(debug({title: "JS Out", showCount: false}));
 
 	gulp.src(ts_source)
+	    .pipe(debug({title: "TS In", showCount: false}))
 	    .pipe(preprocess({context: {BUILD_TYPE: "Prod"}}))
 	    .pipe(ts({
 		             noImplicitAny: true
@@ -40,7 +46,8 @@ function doBuild(dest, buildType, callback)
 	    .pipe(rename({
 		                 extname: ".user.js"
 	                 }))
-	    .pipe(gulp.dest(dest));
+	    .pipe(gulp.dest(dest))
+	    .pipe(debug({title: "TS Out", showCount: false}));
 
 	callback();
 }

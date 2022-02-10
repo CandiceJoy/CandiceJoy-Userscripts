@@ -11,13 +11,11 @@
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @grant        none
 // ==/UserScript==
-/*jshint esversion: 8 */
-
+"use strict";
 const logo = "amiamilogo.png";
 
 (function()
 {
-	'use strict';
 	$("a img").each(function()
 	                {
 		                if($(this).attr("src").includes(logo))

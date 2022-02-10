@@ -1,3 +1,4 @@
+
 class Watcher
 {
 	constructor(callback, node = document.querySelector("body"))
@@ -15,11 +16,6 @@ class Watcher
 	createObserver()
 	{
 		this.observer = new MutationObserver(this.observed.bind(this));
-	}
-
-	setFilter(filter)
-	{
-		this.filter = filter;
 	}
 
 	setCallback(callback)
@@ -46,7 +42,7 @@ class Watcher
 	observed(mutations)
 	{
 		//console.log(this);
-		var nodes = new Array();
+		let nodes = [];
 
 		mutations.forEach((mutation) =>
 		                  {
@@ -82,26 +78,26 @@ class Watcher
 	}
 }
 
-//Example
-let watcher = new Watcher((node) =>
-                          {
-	                          //Simply output each node
-	                          console.log(node);
-                          });
+/*
+ let watcher = new Watcher((node) =>
+ {
+ //Simply output each node
+ console.log(node);
+ });
 
-watcher.setFilter((node) =>
-                  {
-	                  if(node instanceof HTMLDivElement)
-	                  {
-		                  //If the node is a div, keep it
-		                  return true;
-	                  }
-	                  else
-	                  {
-		                  //Otherwise, dump it
-		                  return false;
-	                  }
-                  });
+ watcher.setFilter((node) =>
+ {
+ if(node instanceof HTMLDivElement)
+ {
+ //If the node is a div, keep it
+ return true;
+ }
+ else
+ {
+ //Otherwise, dump it
+ return false;
+ }
+ });
 
-//Begin watching
-watcher.on();
+ //Begin watching
+ watcher.on();*/

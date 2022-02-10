@@ -20,23 +20,21 @@
 // @grant        none
 // ==/UserScript==
 // @if BUILD_TYPE="Prod"
-/*jshint esversion: 8 */
-
+"use strict";
 const headerSelector = "#main";
 const activitySelector = ".activity-wrapper";
 const iconSelector = ".icon-bell-slash";
 
 (function()
 {
-	'use strict';
-	var button = document.createElement("button");
+	let button = document.createElement("button");
 	button.innerText = "Mark All As Read";
 	button.type = "button";
 	button.addEventListener("click", buttonClicked);
 	$(headerSelector).prepend(button);
 })();
 
-function buttonClicked(event)
+function buttonClicked()
 {
 	$(document).find(activitySelector).find(iconSelector).each(function()
 	                                                           {

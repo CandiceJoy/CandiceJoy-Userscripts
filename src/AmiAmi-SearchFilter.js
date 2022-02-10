@@ -23,7 +23,8 @@
 // @run-at document-idle
 // ==/UserScript==
 // @if BUILD_TYPE="Prod"
-/*jshint esversion: 8 */
+/* globals GM_config */
+"use strict";
 /*
  Condition Rank of the products.
 
@@ -44,7 +45,7 @@
 // !!!!!!!include ../libraries/config.js
 const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
 const boxConditions = ["A", "B", "C", "N"];
-var configDoc;
+let configDoc;
 
 GM_config.init({
 	               'id'   : 'amiami-search-filter', // The id used for this instance of GM_config
@@ -104,7 +105,7 @@ GM_config.init({
 			                                                  {
 				                                                  $(this).height($(this)[0].scrollHeight + 20);
 			                                                  });
-		               }, 'save': function(forgotten)
+		               }, 'save': function()
 		               {
 
 			               $(configDoc).find("textarea").each(function()
@@ -144,41 +145,13 @@ const dontExclude = /*["astolfo", "tohsaka", "saber", "altria", "sakurajima", "t
  "kurumi", "gremory", "chizuru", "ikaros", "velvet", "milla", "pyra", "mythra", "claudius",
  "b-style", "quintessential"]*/ (GM_config.get("dontExclude")) ? GM_config.get("dontExclude").split("\n") : [];
 
-
-var _htmlToElements = function(html)
-{
-	var template = document.createElement('template');
-	template.innerHTML = html;
-
-	const nodes = template.content.childNodes, nodesArray = [], scriptsArray = [];
-	for(var i in nodes)
-	{
-		if(nodes[i].nodeType == 1)
-		{ // get rid of the whitespace text nodes
-			if(nodes[i].nodeName === 'SCRIPT')
-			{
-				scriptsArray.push(nodes[i]);
-			}
-			else
-			{
-				nodesArray.push(nodes[i]);
-			}
-		}
-	}
-	return nodesArray.concat(scriptsArray);
-};
-
-var loadData = async function(data, container, appendData = false)
-{
-	return _loadContent(_htmlToElements(data), 0, container, appendData);
-};
 const itemSelector = ".newly-added-items__item";
 const pagerSelector = ".pager_mb,.pager-list";
 const pagerNumSelector = "li.pager-list__item_num";
 const gcodeSelector = "a";
 const gcodeID = "gcode";
-const itemConditionRegex = "/ITEM:(.*?)\//id";
-const boxConditionRegex = "/BOX:(.*?)\)/id";
+const itemConditionRegex = "/ITEM:(.*?)//id";
+const boxConditionRegex = "/BOX:(.*?))/id";
 const orderClosed = "order closed";
 
 const observerConfig = {
@@ -187,7 +160,8 @@ const observerConfig = {
 
 const observer = new MutationObserver(observerFunc);
 const basePath = window.location.protocol + '//' + window.location.host;
-const itemNameSelector = ".item-detail__section-title";
+
+//const itemNameSelector = ".item-detail__section-title";
 
 class Item
 {
@@ -209,21 +183,21 @@ class Item
 		}
 
 		//console.log(data);
-		this.item = data["item"];
-		var item = this.item;
-		this.name = item["gname"];
-		this.jancode = item["jancode"];
-		this.instock = item["instock_flg"] > 0;
-		this.price = item["price"];
-		this.buy = item["buy_flg"] > 0;
-		this.preowned = item["condition_flg"] == 1;
-		this.closed = item["order_closed_flg"];
-		this.resale = item["resale_flg"];
-		this.scode = item["scode"];
+		this.item = data.item;
+		let item = this.item;
+		this.name = item.gname;
+		this.jancode = item.jancode;
+		this.instock = item.instock_flg > 0;
+		this.price = item.price;
+		this.buy = item.buy_flg > 0;
+		this.preowned = item.condition_flg == 1;
+		this.closed = item.order_closed_flg;
+		this.resale = item.resale_flg;
+		this.scode = item.scode;
 		this.mfc = "https://myfigurecollection.net/browse.v4.php?keywords=" + this.jancode;
-		this.sname = item["sname"];
-		this.itemCondition = new RegExp(itemConditionRegex).exec(item["sname"])[1];
-		this.boxCondition = new RegExp(boxConditionRegex).exec(item["sname"])[1];
+		this.sname = item.sname;
+		this.itemCondition = new RegExp(itemConditionRegex).exec(item.sname)[1];
+		this.boxCondition = new RegExp(boxConditionRegex).exec(item.sname)[1];
 
 		let ele = this.element;
 		let tags = $(ele).find(
@@ -232,10 +206,10 @@ class Item
 		$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
 		 .always(function(data)
 		         {
-			         var conversionFactor = $(data).attr(currency);
+			         let conversionFactor = $(data).attr(currency);
 
-			         var newPrice = parseFloat(conversionFactor) * this.price;
-			         var formatter = new Intl.NumberFormat('en-US', {
+			         let newPrice = parseFloat(conversionFactor) * this.price;
+			         let formatter = new Intl.NumberFormat('en-US', {
 				         style: 'currency', currency: currency.toUpperCase()
 			         });
 
@@ -250,7 +224,7 @@ class Item
 
 		tags.each((key, val) =>
 		          {
-			          var text = val.innerText.toLowerCase();
+			          let text = val.innerText.toLowerCase();
 
 			          if(text.includes(orderClosed.toLowerCase()))
 			          {
@@ -258,10 +232,10 @@ class Item
 				          console.log(name + ": Order Closed[tag]");
 			          }
 		          });
-		var aTags = ele.getElementsByTagName("span");
-		var searchText = " ";
+		let aTags = ele.getElementsByTagName("span");
+		let searchText = " ";
 
-		for(var i = 0; i < aTags.length; i++)
+		for(let i = 0; i < aTags.length; i++)
 		{
 			if(aTags[i].textContent === searchText)
 			{
@@ -276,9 +250,9 @@ class Item
 	processItem()
 	{
 		//Process Always Exclude List
-		for(var y in alwaysExclude)
+		for(let y in alwaysExclude)
 		{
-			var exclude2 = alwaysExclude[y].toLowerCase();
+			let exclude2 = alwaysExclude[y].toLowerCase();
 
 			if(this.name.toLowerCase().indexOf(exclude2) > -1)
 			{
@@ -309,9 +283,9 @@ class Item
 		}
 
 		//Process Don't Exclude List
-		for(var x in dontExclude)
+		for(let x in dontExclude)
 		{
-			var exclude1 = dontExclude[x].toLowerCase();
+			let exclude1 = dontExclude[x].toLowerCase();
 
 			if(this.name.toLowerCase().indexOf(exclude1) > -1)
 			{
@@ -349,9 +323,11 @@ class Item
 
 	finish()
 	{
-		var itemTag = this.addTag("Item: " + this.itemCondition);
-		var boxTag = this.addTag("Box: " + this.boxCondition);
-		var mfcTag = this.addTag(`<a href="${this.mfc}">MFC</a>`);
+		/*let itemTag = */
+		this.addTag("Item: " + this.itemCondition);
+		/*let boxTag = */
+		this.addTag("Box: " + this.boxCondition);
+		let mfcTag = this.addTag(`<a href="${this.mfc}">MFC</a>`);
 
 
 		$(mfcTag).click(function(e)
@@ -367,22 +343,8 @@ class Item
 
 	addTag(text)
 	{
-		var ele = this.element;
-
-		$(mfcTag).click(function(e)
-		                {
-			                e.stopImmediatePropagation();
-		                });
-		if(this.price <= highlightPrice)
-		{
-			$(this.element).find(".newly-added-items__item__price").css("color", "green");
-		}
-	}
-
-	addTag(text)
-	{
-		var ele = this.element;
-		var tag = document.createElement("li");
+		let ele = this.element;
+		let tag = document.createElement("li");
 		$(tag).addClass("newly-added-items__item__tag-list__item");
 		$(tag).html(text);
 		$(tag).attr("style", "display: inline;");
@@ -398,7 +360,6 @@ class Item
 
 (function()
 {
-	'use strict';
 	observer.observe(document.querySelector("body"), observerConfig);
 })();
 
@@ -406,7 +367,7 @@ function observerFunc(mutations)
 {
 	mutations.forEach((mutation) =>
 	                  {
-		                  var found = $(mutation.addedNodes).find(itemSelector).length;
+		                  let found = $(mutation.addedNodes).find(itemSelector).length;
 
 		                  if(found > 0)
 		                  {
@@ -420,19 +381,15 @@ function observerFunc(mutations)
 					                         GM_config.open();
 				                         });
 		                  }
-		                  else
-		                  {
-
-		                  }
 	                  });
 }
 
 function processButtons()
 {
-	var url = new URL(location.href);
-	var urlParams = url.searchParams;
-	var page = parseInt(urlParams.get("pagecnt"));
-	var maxPage = parseInt($(pagerNumSelector).last().text());
+	let url = new URL(location.href);
+	let urlParams = url.searchParams;
+	let page = parseInt(urlParams.get("pagecnt"));
+	let maxPage = parseInt($(pagerNumSelector).last().text());
 
 	$(pagerSelector).children().each(function()
 	                                 {
@@ -443,7 +400,7 @@ function processButtons()
 	{
 		$(pagerSelector).each(function()
 		                      {
-			                      var firstButton = document.createElement("button");
+			                      let firstButton = document.createElement("button");
 			                      firstButton.innerText = "First";
 			                      firstButton.type = "button";
 			                      firstButton.classList.add("candibutton");
@@ -459,7 +416,7 @@ function processButtons()
 
 	$(pagerSelector).each(function()
 	                      {
-		                      var refreshButton = document.createElement("button");
+		                      let refreshButton = document.createElement("button");
 		                      refreshButton.innerText = "Reload";
 		                      refreshButton.type = "button";
 		                      refreshButton.classList.add("candibutton");
@@ -474,7 +431,7 @@ function processButtons()
 	{
 		$(pagerSelector).each(function()
 		                      {
-			                      var prevButton = document.createElement("button");
+			                      let prevButton = document.createElement("button");
 			                      prevButton.innerText = "Prev Page";
 			                      prevButton.type = "button";
 			                      prevButton.classList.add("candibutton");
@@ -491,7 +448,7 @@ function processButtons()
 	{
 		$(pagerSelector).each(function()
 		                      {
-			                      var nextButton = document.createElement("button");
+			                      let nextButton = document.createElement("button");
 			                      nextButton.innerText = "Next Page";
 			                      nextButton.type = "button";
 			                      nextButton.classList.add("candibutton");
@@ -513,11 +470,11 @@ function update(node)
 {
 	$(node).find(itemSelector).each(function()
 	                                {
-		                                var href = $(this).find(gcodeSelector);
-		                                var link = href.attr("href");
-		                                var urlParams = new URL(basePath + link).searchParams;
-		                                var gcode = urlParams.get(gcodeID);
-		                                var item = new Item(gcode, link);
+		                                let href = $(this).find(gcodeSelector);
+		                                let link = href.attr("href");
+		                                let urlParams = new URL(basePath + link).searchParams;
+		                                let gcode = urlParams.get(gcodeID);
+		                                let item = new Item(gcode, link);
 		                                item.element = this;
 	                                });
 }

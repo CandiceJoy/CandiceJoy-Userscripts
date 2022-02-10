@@ -1,14 +1,9 @@
+/* globals GM_config */
 const exists = typeof GM_config != "undefined";
 const types = ["number", "int", "integer", "float", "text", "textarea", "select", "button", "checkbox", "radio", "hidden"];
 const allowedProperties = {
-	all: ["title", "labelPos"],
-	text: ["size"],
-	int: ["size","min","max"],
-	float: ["size"],
-	select: ["options"],
-	radio: ["options"],
-	hidden: ["value"],
-	button: ["size","click"]
+	all  : ["title", "labelPos"], text: ["size"], int: ["size", "min", "max"], float: ["size"], select: ["options"],
+	radio: ["options"], hidden: ["value"], button: ["size", "click"]
 };
 const allowedEvents = ["init","open","save","close","reset"];
 
@@ -29,8 +24,8 @@ class Config
 	{
 		this.id = id;
 		this.title = title;
-		this.fields = new Array();
-		this.events = new Array();
+		this.fields = [];
+		this.events = [];
 	}
 
 	add( name, label, typeIn, defaultValue, properties = null )
@@ -107,17 +102,17 @@ class Config
 
 	generateFields()
 	{
-		let fieldsObject = new Object();
+		let fieldsObject = {};
 
 		for(let i in this.fields)
 		{
 			let field = this.fields[i];
-			let fieldObject = new Object();
+			let fieldObject = {};
 
 			fieldObject.label = field.label;
 			fieldObject.type = field.type;
 
-			if( field.defaultValue !== null && field.defaultValue !== undefined )
+			if(field.defaultValue !== null && field.defaultValue !== undefined)
 			{
 				fieldObject.default = field.defaultValue;
 			}
@@ -136,18 +131,18 @@ class Config
 
 	generateEvents()
 	{
-		if( this.events.length <= 0 )
+		if(this.events.length <= 0)
 		{
 			return null;
 		}
 
 		let hasEvents = false;
-		let eventsObject = new Object();
+		let eventsObject = {};
 
 		for(let i in this.events)
 		{
 			let event = this.events[i];
-			let eventObject = new Object();
+			let eventObject = {};
 
 			eventsObject[event.event] = event.callback;
 			hasEvents = true;
@@ -158,7 +153,7 @@ class Config
 
 	init()
 	{
-		let configObject = new Object();
+		let configObject = {};
 
 		configObject.id = this.id;
 		configObject.title = this.title;
@@ -191,7 +186,7 @@ class Config
 		}
 	}
 
-	async show()
+	show()
 	{
 		if(exists)
 		{
@@ -204,16 +199,16 @@ class Config
 
 		this.frame = GM_config.frame;
 
-		return new Promise(
-			resolve=>{
-				this.frame.onload = function() {
-					console.log("FRAME: "+this.frame);
-					this.document = this.frame.contentDocument;
-					this.window = this.frame.contentWindow;
-					resolve();
-				}.bind(this);
-			}
-		);
+		return new Promise(resolve =>
+		                   {
+			                   this.frame.onload = function()
+			                   {
+				                   console.log("FRAME: " + this.frame);
+				                   this.document = this.frame.contentDocument;
+				                   this.window = this.frame.contentWindow;
+				                   resolve();
+			                   }.bind(this);
+		                   });
 	}
 
 	get(name)

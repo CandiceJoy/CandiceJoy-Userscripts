@@ -20,13 +20,11 @@
 // @grant        none
 // ==/UserScript==
 // @if BUILD_TYPE="Prod"
-/*jshint esversion: 8 */
-
+"use strict";
 const logo = "amiamilogo.png";
 
 (function()
 {
-	'use strict';
 	$("a img").each(function()
 	                {
 		                if($(this).attr("src").includes(logo))
