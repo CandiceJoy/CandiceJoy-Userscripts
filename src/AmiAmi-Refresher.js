@@ -1,9 +1,7 @@
 // ==UserScript==
 // @name         AmiAmi Refresher
 // @namespace    http://candicejoy.com/
-// @ifdef PROD
 // @version      1.1
-// @endif
 // @description  AmiAmi Refresher / Auto-Add-To-Cart
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/detail/*
