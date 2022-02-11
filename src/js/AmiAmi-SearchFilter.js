@@ -23,7 +23,6 @@
 // @run-at document-idle
 // ==/UserScript==
 // @if BUILD_TYPE="Prod"
-/* globals GM_config */
 "use strict";
 /*
  Condition Rank of the products.
@@ -43,9 +42,10 @@
  N: No box/packaging is included. (item is loose)
  */
 // !!!!!!!include ../libraries/config.js
-const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
-const boxConditions = ["A", "B", "C", "N"];
-let configDoc;
+const AmiAmiSearchFilter = {};
+AmiAmiSearchFilter.itemConditions = ["A", "A-", "B+", "B", "C", "J"];
+AmiAmiSearchFilter.boxConditions = ["A", "B", "C", "N"];
+AmiAmiSearchFilter.configDoc = null;
 
 GM_config.init({
 	               'id'   : 'amiami-search-filter', // The id used for this instance of GM_config
@@ -60,13 +60,13 @@ GM_config.init({
 				{
 					'label'  : 'Lowest Allowed Item Condition: ', // Appears next to field
 					'type'   : 'select', // Makes this setting a text field
-					'options': itemConditions, // Possible choices
+					'options': AmiAmiSearchFilter.itemConditions, // Possible choices
 					'default': 'B' // Default value if user doesn't change it
 				}, 'allowedBoxConditions' : // This is the id of the field
 				{
 					'label'  : 'Lowest Allowed Box Condition: ', // Appears next to field
 					'type'   : 'select', // Makes this setting a text field
-					'options': boxConditions, // Possible choices
+					'options': AmiAmiSearchFilter.boxConditions, // Possible choices
 					'default': 'B' // Default value if user doesn't change it
 				}, 'priceThreshold'       : // This is the id of the field
 				{
@@ -92,11 +92,10 @@ GM_config.init({
 		},
 
 	               'events': {
-		               'init'   : function()
+		               'open': function(doc)
 		               {
-		               }, 'open': function(doc)
-		               {
-			               configDoc = doc;
+			               AmiAmiSearchFilter.configDoc = doc;
+			               let configDoc = AmiAmiSearchFilter.configDoc;
 
 			               $(configDoc).find("#amiami-search-filter_field_currency").attr("maxlength", "3");
 			               $(configDoc).find("#amiami-search-filter_field_exclude").attr("cols", "20");
@@ -107,12 +106,12 @@ GM_config.init({
 			                                                  });
 		               }, 'save': function()
 		               {
-
+let configDoc = AmiAmiSearchFilter.configDoc;
 			               $(configDoc).find("textarea").each(function()
 			                                                  {
 				                                                  $(this).height($(this)[0].scrollHeight + 20);
 			                                                  });
-			               if($(configDoc).find("#amiami-search-filter_field_currency").val().length != 3)
+			               if($(configDoc).find("#amiami-search-filter_field_currency").val().length !== 3)
 			               {
 				               alert("Currency must be 3 letters");
 			               }
@@ -130,40 +129,40 @@ GM_config.init({
 	               }
                });
 
-const allowedItemConditions = GM_config.get("allowedItemConditions"); //letters only
-const allowedBoxConditions = GM_config.get("allowedBoxConditions"); //letters only
-const currency = GM_config.get("currency").toLowerCase(); //lowercase, 3 letter
-const priceThreshold = GM_config.get("priceThreshold"); //exclude prices > this (yen)
-const highlightPrice = GM_config.get("highlightPrice"); //highlight prices <= this (yen)
+AmiAmiSearchFilter.allowedItemConditions = GM_config.get("allowedItemConditions"); //letters only
+AmiAmiSearchFilter.allowedBoxConditions = GM_config.get("allowedBoxConditions"); //letters only
+AmiAmiSearchFilter.currency = GM_config.get("currency").toString().toLowerCase(); //lowercase, 3 letter
+AmiAmiSearchFilter.priceThreshold = GM_config.get("priceThreshold"); //exclude prices > this (yen)
+AmiAmiSearchFilter.highlightPrice = GM_config.get("highlightPrice"); //highlight prices <= this (yen)
 
 //Never shows no matter what
-const alwaysExclude = /*["nendoroid", "gundam", "figma"]*/(GM_config.get("exclude")) ?
-	GM_config.get("exclude").split("\n") : [];
+AmiAmiSearchFilter.alwaysExclude = /*["nendoroid", "gundam", "figma"]*/(GM_config.get("exclude")) ?
+	GM_config.get("exclude").toString().split("\n") : [];
 
 //Shows only if all conditions are met but the price is too high
-const dontExclude = /*["astolfo", "tohsaka", "saber", "altria", "sakurajima", "tamamo", "fate", "mizuhara", "akeno",
+AmiAmiSearchFilter.dontExclude = /*["astolfo", "tohsaka", "saber", "altria", "sakurajima", "tamamo", "fate", "mizuhara", "akeno",
  "kurumi", "gremory", "chizuru", "ikaros", "velvet", "milla", "pyra", "mythra", "claudius",
  "b-style", "quintessential"]*/ (GM_config.get("dontExclude")) ? GM_config.get("dontExclude").split("\n") : [];
 
-const itemSelector = ".newly-added-items__item";
-const pagerSelector = ".pager_mb,.pager-list";
-const pagerNumSelector = "li.pager-list__item_num";
-const gcodeSelector = "a";
-const gcodeID = "gcode";
-const itemConditionRegex = "/ITEM:(.*?)//id";
-const boxConditionRegex = "/BOX:(.*?))/id";
-const orderClosed = "order closed";
+AmiAmiSearchFilter.itemSelector = ".newly-added-items__item";
+AmiAmiSearchFilter.pagerSelector = ".pager_mb,.pager-list";
+AmiAmiSearchFilter.pagerNumSelector = "li.pager-list__item_num";
+AmiAmiSearchFilter.gcodeSelector = "a";
+AmiAmiSearchFilter.gcodeID = "gcode";
+AmiAmiSearchFilter.itemConditionRegex = "/ITEM:(.*?)//id";
+AmiAmiSearchFilter.boxConditionRegex = "/BOX:(.*?))/id";
+AmiAmiSearchFilter.orderClosed = "order closed";
 
-const observerConfig = {
+AmiAmiSearchFilter.observerConfig = {
 	childList: true, subtree: true, attributes: true
 };
 
-const observer = new MutationObserver(observerFunc);
-const basePath = window.location.protocol + '//' + window.location.host;
+AmiAmiSearchFilter.observer = new MutationObserver(observerFunc);
+AmiAmiSearchFilter.basePath = window.location.protocol + '//' + window.location.host;
 
 //const itemNameSelector = ".item-detail__section-title";
 
-class Item
+AmiAmiSearchFilter.Item = class
 {
 	constructor(gcode, link)
 	{
@@ -176,7 +175,7 @@ class Item
 
 	setup(data, textStatus, xhr)
 	{
-		if(xhr.status != 200)
+		if(xhr.status !== 200)
 		{
 			console.log("API Call Failed [" + this.gcode + "]");
 			return;
@@ -190,7 +189,7 @@ class Item
 		this.instock = item.instock_flg > 0;
 		this.price = item.price;
 		this.buy = item.buy_flg > 0;
-		this.preowned = item.condition_flg == 1;
+		this.preowned = item.condition_flg === 1;
 		this.closed = item.order_closed_flg;
 		this.resale = item.resale_flg;
 		this.scode = item.scode;
@@ -215,7 +214,7 @@ class Item
 
 			         this.convertedPrice = formatter.format(newPrice);
 
-			         if(this.convertedPrice != undefined)
+			         if(this.convertedPrice !== undefined)
 			         {
 				         $(this.element).find(".newly-added-items__item__price").text(this.convertedPrice);
 				         $(this.element).find(".newly-added-items__item__price_state_currency").hide();
@@ -276,7 +275,7 @@ class Item
 		}
 
 		//Process Price Missing
-		if(this.price == undefined || this.price == "")
+		if(this.price === undefined || this.price === "")
 		{
 			console.log(this.name + ": Can't find price [" + this.price + "]");
 			return;
@@ -358,12 +357,12 @@ class Item
 	}
 }
 
-(function()
+AmiAmiSearchFilter.main=function()
 {
 	observer.observe(document.querySelector("body"), observerConfig);
-})();
+};
 
-function observerFunc(mutations)
+AmiAmiSearchFilter.observerFunc=function(mutations)
 {
 	mutations.forEach((mutation) =>
 	                  {
@@ -384,7 +383,7 @@ function observerFunc(mutations)
 	                  });
 }
 
-function processButtons()
+AmiAmiSearchFilter.processButtons=function()
 {
 	let url = new URL(location.href);
 	let urlParams = url.searchParams;
@@ -396,7 +395,7 @@ function processButtons()
 		                                 $(this).hide();
 	                                 });
 
-	if(page != 1)
+	if(page !== 1)
 	{
 		$(pagerSelector).each(function()
 		                      {
@@ -461,12 +460,11 @@ function processButtons()
 		                      });
 	}
 
-	$(".candibutton").css("margin-right", "10px");
-	$(".candibutton").css("margin-left", "10px");
+	$(".candibutton").css("margin-right", "10px").css("margin-left", "10px");
 	$(pagerSelector).prepend("</p>" + page + "/" + maxPage + "</p>");
 }
 
-function update(node)
+AmiAmiSearchFilter.update=function(node)
 {
 	$(node).find(itemSelector).each(function()
 	                                {
@@ -479,4 +477,5 @@ function update(node)
 	                                });
 }
 
+AmiAmiSearchFilter.main();
 // @endif

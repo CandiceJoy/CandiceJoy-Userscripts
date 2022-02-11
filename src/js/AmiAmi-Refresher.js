@@ -23,33 +23,43 @@
 // @if BUILD_TYPE="Prod"
 "use strict";
 //--== User Editable ==--
-const currency = "usd";
-const refreshSeconds = 15; //seconds
+const AmiAmiRefresher = {};
+AmiAmiRefresher.currency = "usd";
+AmiAmiRefresher.refreshSeconds = 15; //seconds
 //--== End User Editable ==--
 
-const observerConfig = {
+AmiAmiRefresher.observerConfig = {
 	childList: true, subtree: true, attributes: true
 };
 
-const buttonSelector = 'button.btn-cart[style=""]';
-const priceSelector = '.item-detail__price_selling-price';
-const observer = new MutationObserver(observerFunc);
+AmiAmiRefresher.buttonSelector = 'button.btn-cart[style=""]';
+AmiAmiRefresher.priceSelector = '.item-detail__price_selling-price';
+AmiAmiRefresher.observer = new MutationObserver(AmiAmiRefresher.observerFunc);
 //const buyText = "add to cart";
 
-const priceThreshold = 10000;
-const refreshTimer = refreshSeconds * 1000;
+AmiAmiRefresher.priceThreshold = 10000;
+AmiAmiRefresher.refreshTimer = AmiAmiRefresher.refreshSeconds * 1000;
 
-const timeout = setTimeout(function()
-                           {
-	                           location.reload();
-                           }, refreshTimer);
+AmiAmiRefresher.timeout = setTimeout(function()
+                                     {
+	                                     location.reload();
+                                     }, AmiAmiRefresher.refreshTimer);
 
-(function()
+AmiAmiRefresher.main = function()
 {
-	observer.observe(document.querySelector("body"), observerConfig);
-})();
+	let body = document.querySelector("body");
 
-function jancodeLink()
+	if(body)
+	{
+		AmiAmiRefresher.observer.observe(body, AmiAmiRefresher.observerConfig);
+	}
+	else
+	{
+		throw "Cannot find body?!";
+	}
+};
+
+AmiAmiRefresher.jancodeLink = function()
 {
 	//console.log(nodes);
 	let ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
@@ -67,22 +77,22 @@ function jancodeLink()
 	}
 
 	return false;
-}
+};
 
-function getPrice()
+AmiAmiRefresher.getPrice = function()
 {
-	return parseInt($(priceSelector).text().replace("JPY", "").replace(",", ""));
-}
+	return parseInt($(AmiAmiRefresher.priceSelector).text().replace("JPY", "").replace(",", ""));
+};
 
-function cartButton()
+AmiAmiRefresher.cartButton = function()
 {
-	let cartButton = $(document).find(buttonSelector);
+	let cartButton = $(document).find(AmiAmiRefresher.buttonSelector);
 
 	if(cartButton !== undefined && cartButton !== null)
 	{
-		if(getPrice() > priceThreshold)
+		if(AmiAmiRefresher.getPrice() > AmiAmiRefresher.priceThreshold)
 		{
-			clearTimeout(timeout);
+			clearTimeout(AmiAmiRefresher.timeout);
 			console.log("Price too high, not auto-clicking");
 		}
 		else
@@ -95,28 +105,28 @@ function cartButton()
 	}
 
 	return false;
-}
+};
 
-function currencyConversion()
+AmiAmiRefresher.currencyConversion = function()
 {
-	$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
+	$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + AmiAmiRefresher.currency + ".json")
 	 .always(function(data)
 	         {
-		         let conversionFactor = $(data).attr(currency);
-		         let newPrice = parseFloat(conversionFactor) * getPrice();
+		         let conversionFactor = $(data).attr(AmiAmiRefresher.currency);
+		         let newPrice = parseFloat(conversionFactor) * AmiAmiRefresher.getPrice();
 		         let formatter = new Intl.NumberFormat('en-US', {
-			         style: 'currency', currency: currency.toUpperCase()
+			         style: 'currency', currency: AmiAmiRefresher.currency.toUpperCase()
 		         });
 		         let finalPrice = formatter.format(newPrice);
 
-		         if(finalPrice != undefined)
+		         if(finalPrice !== undefined)
 		         {
 			         $(document).find(".item-detail__price_selling-price").text(finalPrice);
 		         }
 	         });
-}
+};
 
-function observerFunc(mutations)
+AmiAmiRefresher.observerFunc = function(/** @type {any[]} */ mutations)
 {
 	let done1 = false;
 	let done2 = false;
@@ -130,19 +140,19 @@ function observerFunc(mutations)
 
 		                  if(!done1)
 		                  {
-			                  done1 = jancodeLink();
+			                  done1 = AmiAmiRefresher.jancodeLink();
 		                  }
 		                  if(!done2)
 		                  {
-			                  done2 = cartButton();
+			                  done2 = AmiAmiRefresher.cartButton();
 		                  }
 
 		                  if(done1 && done2)
 		                  {
-			                  currencyConversion();
-			                  observer.disconnect();
+			                  AmiAmiRefresher.currencyConversion();
+			                  AmiAmiRefresher.observer.disconnect();
 		                  }
 	                  });
-}
-
+};
+AmiAmiRefresher.main();
 // @endif

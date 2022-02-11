@@ -1,8 +1,18 @@
 {
-  "extends"      : "eslint:recommended",
+  "extends"      : [
+	"eslint:recommended",
+	"plugin:@typescript-eslint/eslint-recommended",
+	"plugin:@typescript-eslint/recommended"
+  ],
   "rules"        : {
 	"no-mixed-spaces-and-tabs": "off",
-	"require-await"           : "error"
+	"require-await"           : "error",
+	"no-var"                  : "error",
+	"semi-style"              : [
+	  "error",
+	  "last"
+	],
+	"semi": [2, "always"]
   },
   "parserOptions": {
 	"ecmaVersion": 8,
@@ -12,5 +22,24 @@
 	"browser": true,
 	"es6"    : true,
 	"jquery" : true
-  }
+  },
+  "overrides"    : [
+	{
+	  "files"        : [
+		"src/*.ts"
+	  ],
+	  "parser"       : "@typescript-eslint/parser",
+	  "parserOptions": {
+		"ecmaFeatures": {
+		  "jsx": false
+		}
+	  },
+	  "plugins"      : [
+		"@typescript-eslint"
+	  ],
+	  "rules"        : {
+		"@typescript-eslint/no-explicit-any": "error"
+	  }
+	}
+  ]
 }
