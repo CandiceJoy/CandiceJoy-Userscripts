@@ -1,41 +1,41 @@
-const logLevels = ["TRACE", "DEBUG", "LOG", "WARN", "ERROR", "FATAL"]; //Last one is always fatal
-const logXlat = {
-	FATAL: "FATAL ERROR"
-};
-const defaultLoggerSettings = {
-	timestamp: true, date: true, time: true, millis: true, name: false, timezone: true, level: true, init: true
-};
-
-const logDefaultLevel = "log";
-const logDefaultName = "Default";
-const logDefaultCallback = console.log;
-const logInitMessage = "Logger [$] started";
-const logInitMessageLevel = "log";
-
-class Log
+let Log = class
 {
+	#logLevels = ["TRACE", "DEBUG", "LOG", "WARN", "ERROR", "FATAL"]; //Last one is always fatal
+	#logXlat = {
+		FATAL: "FATAL ERROR"
+	};
+	#defaultLoggerSettings = {
+		timestamp: true, date: true, time: true, millis: true, name: false, timezone: true, level: true, init: true
+	};
+
+	#logDefaultLevel = "log";
+	#logDefaultName = "Default";
+	#logDefaultCallback = console.log;
+	#logInitMessage = "Logger [$] started";
+	#logInitMessageLevel = "log";
+
 	constructor(levelIn = null, nameIn = null, callbackIn = null, settings = null)
 	{
 		this.loggers = [];
 
 		if(callbackIn === null)
 		{
-			callbackIn = logDefaultCallback;
+			callbackIn = this.#logDefaultCallback;
 		}
 
 		if(levelIn === null)
 		{
-			levelIn = logDefaultLevel;
+			levelIn = this.#logDefaultLevel;
 		}
 
 		if(nameIn === null)
 		{
-			nameIn = logDefaultName;
+			nameIn = this.#logDefaultName;
 		}
 
 		if(settings === null)
 		{
-			settings = defaultLoggerSettings;
+			settings = this.#defaultLoggerSettings;
 		}
 
 		this.addLogger(callbackIn, levelIn, nameIn, settings);
@@ -45,13 +45,13 @@ class Log
 	{
 		let finalSettings = {};
 
-		for(let i in defaultLoggerSettings)
+		for(let i in this.#defaultLoggerSettings)
 		{
 			let input = settings[i];
 
 			if(input === null || input === undefined || input === "")
 			{
-				finalSettings[i] = defaultLoggerSettings[i];
+				finalSettings[i] = this.#defaultLoggerSettings[i];
 			}
 			else
 			{
@@ -66,7 +66,7 @@ class Log
 	{
 		if(settings === null)
 		{
-			settings = defaultLoggerSettings;
+			settings = this.#defaultLoggerSettings;
 		}
 
 		let logger = {};
@@ -90,24 +90,24 @@ class Log
 
 	addLogger(callbackIn = null, levelIn = null, nameIn = null, settings = null)
 	{
-		if( callbackIn === null )
+		if(callbackIn === null)
 		{
-			callbackIn = logDefaultCallback;
+			callbackIn = this.#logDefaultCallback;
 		}
 
-		if( levelIn === null )
+		if(levelIn === null)
 		{
-			levelIn = logDefaultLevel;
+			levelIn = this.#logDefaultLevel;
 		}
 
-		if( nameIn === null )
+		if(nameIn === null)
 		{
-			nameIn = logDefaultName;
+			nameIn = this.#logDefaultName;
 		}
 
 		if(settings === null)
 		{
-			settings = defaultLoggerSettings;
+			settings = this.#defaultLoggerSettings;
 		}
 
 		if(this.getLogger(nameIn))
@@ -132,7 +132,7 @@ class Log
 
 		if(settings.init)
 		{
-			this.output(logInitMessage.replaceAll("$", nameIn), logInitMessageLevel);
+			this.output(this.#logInitMessage.replaceAll("$", nameIn), this.#logInitMessageLevel);
 		}
 	}
 
@@ -169,7 +169,7 @@ class Log
 			}
 		}
 
-		if(levelNum == logLevels.length - 1)
+		if(levelNum === this.#logLevels.length - 1)
 		{
 			throw text;
 		}
@@ -184,7 +184,7 @@ class Log
 
 		let level = levelIn.toUpperCase();
 
-		if(!logLevels.includes(level))
+		if(!this.#logLevels.includes(level))
 		{
 			this.invalidLogLevel(level);
 		}
@@ -194,16 +194,16 @@ class Log
 
 	getLevelNumber(text)
 	{
-		return logLevels.indexOf(this.validateLevel(text));
+		return this.#logLevels.indexOf(this.validateLevel(text));
 	}
 
 	getLevelName(text)
 	{
 		let level = this.validateLevel(text);
 
-		if(logXlat[level])
+		if(this.#logXlat[level])
 		{
-			return logXlat[level];
+			return this.#logXlat[level];
 		}
 		else
 		{
@@ -331,4 +331,4 @@ class Log
 
 		return header;
 	}
-}
+};

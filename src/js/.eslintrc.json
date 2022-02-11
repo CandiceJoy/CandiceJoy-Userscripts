@@ -1,17 +1,14 @@
 {
-  "parser"       : "@babel/eslint-parser",
   "extends"      : "eslint:recommended",
   "rules"        : {
 	"no-mixed-spaces-and-tabs": "off",
 	"require-await"           : "error",
 	"no-debugger"             : "warn",
-	"no-invalid-regexp"       : "error",
-	"no-unused-vars"          : "off"
+	"no-invalid-regexp"       : "error"
   },
   "parserOptions": {
-	"ecmaVersion"      : 8,
-	"sourceType"       : "script",
-	"requireConfigFile": false
+	"ecmaVersion": 8,
+	"sourceType" : "script"
   },
   "env"          : {
 	"browser": true,

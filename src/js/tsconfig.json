@@ -1,15 +1,16 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-	"noImplicitAny": false,
-	"typeRoots": ["../../node_modules/@types","../types"]
-  },
-  "baseUrl"                     : "./",
-  "paths"                       : {
+  "extends"        : "../tsconfig.json",
+  "baseUrl"        : "./",
+  "paths"          : {
 	"*": [
 	  "../../node_modules",
 	  "../../libraries"
 	]
   },
-  "files": ["*.js"]
+  "files"          : [
+	"*.js"
+  ],
+  "compilerOptions": {
+	"outDir": "../../"
+  }
 }

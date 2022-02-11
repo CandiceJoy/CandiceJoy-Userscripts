@@ -1,7 +1,9 @@
-function addNumbers(a: number, b: number) {
-    return a + b;
+namespace Test {
+    function addNumbers(a: number, b: number) {
+        return a + b;
+    }
+
+    const sum: number = addNumbers(10, 15);
+
+    console.log('Sum of the two numbers is: ' + sum);
 }
-
-const sum: number = addNumbers(10, 15);
-
-console.log('Sum of the two numbers is: ' +sum);

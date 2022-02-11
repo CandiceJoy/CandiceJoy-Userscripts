@@ -1,3 +1,4 @@
+"use strict";
 // ==UserScript==
 // @name         MFC Mark All As Read
 // @namespace    http://candicejoy.com/
@@ -7,26 +8,16 @@
 // @match        https://myfigurecollection.net/notifications/*
 // @icon         https://static.myfigurecollection.net/ressources/assets/webicon.png
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @if BUILD_TYPE="Mac"
-// @require file:///Users/candice/WebstormProjects/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
-// @endif
-// @if BUILD_TYPE="PC"
-// @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
-// @endif
-// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @endif
 // @grant        none
 // ==/UserScript==
-// @if BUILD_TYPE="Prod"
 (function()
 {
 	"use strict";
 	const headerSelector = "#main";
 	const activitySelector = ".activity-wrapper";
 	const iconSelector = ".icon-bell-slash";
-
 	(function()
 	{
 		let button = document.createElement("button");
@@ -44,4 +35,5 @@
 		                                                           });
 	}
 })();
-// @endif
+
+//# sourceMappingURL=maps/MFC-MarkAllRead.js.map

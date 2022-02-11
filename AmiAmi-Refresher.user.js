@@ -1,3 +1,4 @@
+"use strict";
 // ==UserScript==
 // @name         AmiAmi Refresher
 // @namespace    http://candicejoy.com/
@@ -8,44 +9,31 @@
 // @icon         https://www.google.com/s2/favicons?domain=amiami.com
 // @grant        none
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @if BUILD_TYPE="Mac"
-// @require file:///Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
-// @endif
-// @if BUILD_TYPE="PC"
-// @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
-// @endif
-// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @endif
 // @run-at document-idle
 // ==/UserScript==
-// @if BUILD_TYPE="Prod"
 (function()
 {
 	"use strict";
+	console.log("HI");
 	//--== User Editable ==--
 	const currency = "usd";
 	const refreshSeconds = 15; //seconds
 	//--== End User Editable ==--
-
 	const observerConfig = {
 		childList: true, subtree: true, attributes: true
 	};
-
 	const buttonSelector = 'button.btn-cart[style=""]';
 	const priceSelector = '.item-detail__price_selling-price';
 	const observer = new MutationObserver(observerFunc);
 	//const buyText = "add to cart";
-
 	const priceThreshold = 10000;
 	const refreshTimer = refreshSeconds * 1000;
-
 	const timeout = setTimeout(function()
 	                           {
 		                           location.reload();
 	                           }, refreshTimer);
-
 	(function()
 	{
 		observer.observe(document.querySelector("body"), observerConfig);
@@ -55,11 +43,9 @@
 	{
 		//console.log(nodes);
 		let ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
-
 		if(ele.length > 0)
 		{
 			let jancode = ele.text();
-
 			if(jancode !== undefined && jancode !== null && jancode.trim() !== "")
 			{
 				let url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
@@ -67,7 +53,6 @@
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -79,7 +64,6 @@
 	function cartButton()
 	{
 		let cartButton = $(document).find(buttonSelector);
-
 		if(cartButton !== undefined && cartButton !== null)
 		{
 			if(getPrice() > priceThreshold)
@@ -92,10 +76,8 @@
 				console.log("CLICK");
 				$(cartButton).click();
 			}
-
 			return true;
 		}
-
 		return false;
 	}
 
@@ -110,7 +92,6 @@
 				         style: 'currency', currency: currency.toUpperCase()
 			         });
 			         let finalPrice = formatter.format(newPrice);
-
 			         if(finalPrice != undefined)
 			         {
 				         $(document).find(".item-detail__price_selling-price").text(finalPrice);
@@ -122,14 +103,12 @@
 	{
 		let done1 = false;
 		let done2 = false;
-
 		mutations.forEach(() =>
 		                  {
 			                  if(done1 && done2)
 			                  {
 				                  return;
 			                  }
-
 			                  if(!done1)
 			                  {
 				                  done1 = jancodeLink();
@@ -138,7 +117,6 @@
 			                  {
 				                  done2 = cartButton();
 			                  }
-
 			                  if(done1 && done2)
 			                  {
 				                  currencyConversion();
@@ -147,4 +125,5 @@
 		                  });
 	}
 })();
-// @endif
+
+//# sourceMappingURL=maps/AmiAmi-Refresher.js.map

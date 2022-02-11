@@ -1,5 +1,4 @@
-
-class Watcher
+let Watcher = class
 {
 	constructor(callback, node = document.querySelector("body"))
 	{
@@ -52,7 +51,7 @@ class Watcher
 			                                              });
 		                  });
 
-		if(this.filter != undefined)
+		if(this.filter !== undefined)
 		{
 			nodes = nodes.filter(this.filter);
 
@@ -76,7 +75,7 @@ class Watcher
 	{
 		this.observer.disconnect();
 	}
-}
+};
 
 /*
  let watcher = new Watcher((node) =>
