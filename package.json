@@ -1,38 +1,50 @@
 {
-  "name": "candicejoy-userscripts",
-  "version": "1.0.0",
-  "description": "## Instructions >If you have suggestions, please submit them as issues and I'll do what I can ^_^",
-  "main": "AmiAmi-Refresher.user.js",
-  "dependencies": {
-	"axios"           : "^0.19.2",
-	"bluebird"        : "^3.7.2",
-	"debug"           : "^3.1.0",
-	"eslint"          : "^8.8.0",
-	"follow-redirects": "^1.5.10",
-	"gulp"            : "^4.0.2",
-	"gulp-debug"      : "^4.0.0",
-	"gulp-eslint-new" : "^1.3.0",
-	"gulp-jshint"     : "^2.1.0",
-	"gulp-livereload" : "^4.0.2",
-	"gulp-preprocess" : "^4.0.2",
-	"gulp-rename"     : "^2.0.0",
-	"gulp-tslint"     : "^8.1.4",
-	"gulp-typescript" : "^6.0.0-alpha.1",
-	"jshint-stylish"  : "^2.2.1",
-	"ms"              : "^2.0.0",
-	"tslint"          : "^6.1.3"
+  "name"           : "candicejoy-userscripts",
+  "version"        : "1.0.0",
+  "description"    : "## Instructions >If you have suggestions, please submit them as issues and I'll do what I can ^_^",
+  "main"           : "AmiAmi-Refresher.user.js",
+  "dependencies"   : {
+	"@babel/eslint-parser"  : "^7.17.0",
+	"@types/gulp-sourcemaps": "^0.0.35",
+	"axios"                 : "^0.19.2",
+	"babel-eslint"          : "^10.1.0",
+	"bluebird"              : "^3.7.2",
+	"debug"                 : "^3.1.0",
+	"follow-redirects"      : "^1.5.10",
+	"gulp-debug"            : "^4.0.0",
+	"gulp-preprocess"       : "^4.0.2",
+	"gulp-rename"           : "^2.0.0",
+	"gulp-sourcemaps"       : "^3.0.0",
+	"gulp-typescript"       : "^6.0.0-alpha.1",
+	"jquery"                : "^3.6.0",
+	"ms"                    : "^2.0.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "scripts"        : {
+	"test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CandiceJoy/CandiceJoy-Userscripts.git"
+  "repository"     : {
+	"type": "git",
+	"url" : "git+https://github.com/CandiceJoy/CandiceJoy-Userscripts.git"
   },
-  "author": "CandiceJoy",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues"
+  "author"         : "CandiceJoy",
+  "license"        : "ISC",
+  "bugs"           : {
+	"url": "https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues"
   },
-  "homepage": "https://github.com/CandiceJoy/CandiceJoy-Userscripts#readme"
+  "homepage"       : "https://github.com/CandiceJoy/CandiceJoy-Userscripts#readme",
+  "devDependencies": {
+	"@types/gulp"       : "^4.0.9",
+	"@types/gulp-debug" : "^2.0.32",
+	"@types/gulp-rename": "^2.0.1",
+	"@types/jquery"     : "^3.5.13",
+	"gulp"              : "^4.0.2",
+	"gulp-debug"        : "^4.0.0",
+	"gulp-livereload"   : "^4.0.2",
+	"gulp-preprocess"   : "^4.0.2",
+	"gulp-rename"       : "^2.0.0",
+	"gulp-sourcemaps"   : "^3.0.0",
+	"gulp-typescript"   : "^6.0.0-alpha.1",
+	"jquery"            : "^3.6.0",
+	"typescript"        : "^4.5.5"
+  }
 }

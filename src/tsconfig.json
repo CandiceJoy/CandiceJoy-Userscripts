@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+	"module"                          : "system",
+	"noImplicitAny"                   : true,
+	"removeComments"                  : false,
+	"preserveConstEnums"              : true,
+	"sourceMap"                       : true,
+	"inlineSourceMap"                 : false,
+	"inlineSources"                   : false,
+	"allowUnreachableCode"            : false,
+	"allowUnusedLabels"               : false,
+	"alwaysStrict"                    : true,
+	"noImplicitOverride"              : true,
+	"noImplicitThis"                  : false,
+	"allowJs"                         : true,
+	"checkJs"                         : false,
+	"noUnusedLocals"                  : true,
+	"noUnusedParameters"              : true,
+	"noUncheckedIndexedAccess"        : true,
+	"noEmitOnError"                   : true,
+	"strict"                          : true,
+	"strictNullChecks"                : true,
+	"strictPropertyInitialization"    : true,
+	"strictBindCallApply"             : true,
+	"pretty"                          : true,
+	"target"                          : "ES2021",
+	"mapRoot"                         : "maps",
+	"listFiles"                       : true,
+	"listEmittedFiles"                : true,
+	"forceConsistentCasingInFileNames": true,
+	"outDir"                          : "../",
+	"lib"                             : [
+	  "DOM",
+	  "ES2021"
+	],
+	"moduleResolution"                : "node",
+	"baseUrl"                         : "./",
+	"paths"                           : {
+	  "*": [
+		"../node_modules/*",
+		"../libraries/*"
+	  ]
+	}
+  }
+}

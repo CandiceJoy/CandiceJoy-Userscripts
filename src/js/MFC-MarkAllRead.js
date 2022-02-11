@@ -20,26 +20,28 @@
 // @grant        none
 // ==/UserScript==
 // @if BUILD_TYPE="Prod"
-"use strict";
-const headerSelector = "#main";
-const activitySelector = ".activity-wrapper";
-const iconSelector = ".icon-bell-slash";
-
 (function()
 {
-	let button = document.createElement("button");
-	button.innerText = "Mark All As Read";
-	button.type = "button";
-	button.addEventListener("click", buttonClicked);
-	$(headerSelector).prepend(button);
+	"use strict";
+	const headerSelector = "#main";
+	const activitySelector = ".activity-wrapper";
+	const iconSelector = ".icon-bell-slash";
+
+	(function()
+	{
+		let button = document.createElement("button");
+		button.innerText = "Mark All As Read";
+		button.type = "button";
+		button.addEventListener("click", buttonClicked);
+		$(headerSelector).prepend(button);
+	})();
+
+	function buttonClicked()
+	{
+		$(document).find(activitySelector).find(iconSelector).each(function()
+		                                                           {
+			                                                           $(this).click();
+		                                                           });
+	}
 })();
-
-function buttonClicked()
-{
-	$(document).find(activitySelector).find(iconSelector).each(function()
-	                                                           {
-		                                                           $(this).click();
-	                                                           });
-}
-
 // @endif

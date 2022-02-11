@@ -1,3 +1,4 @@
+"use strict";
 // ==UserScript==
 // @name         MFC Mark All As Read
 // @namespace    http://candicejoy.com/
@@ -11,25 +12,28 @@
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @grant        none
 // ==/UserScript==
-"use strict";
-const headerSelector = "#main";
-const activitySelector = ".activity-wrapper";
-const iconSelector = ".icon-bell-slash";
-
 (function()
 {
-	let button = document.createElement("button");
-	button.innerText = "Mark All As Read";
-	button.type = "button";
-	button.addEventListener("click", buttonClicked);
-	$(headerSelector).prepend(button);
+	"use strict";
+	const headerSelector = "#main";
+	const activitySelector = ".activity-wrapper";
+	const iconSelector = ".icon-bell-slash";
+	(function()
+	{
+		let button = document.createElement("button");
+		button.innerText = "Mark All As Read";
+		button.type = "button";
+		button.addEventListener("click", buttonClicked);
+		$(headerSelector).prepend(button);
+	})();
+
+	function buttonClicked()
+	{
+		$(document).find(activitySelector).find(iconSelector).each(function()
+		                                                           {
+			                                                           $(this).click();
+		                                                           });
+	}
 })();
 
-function buttonClicked()
-{
-	$(document).find(activitySelector).find(iconSelector).each(function()
-	                                                           {
-		                                                           $(this).click();
-	                                                           });
-}
-
+//# sourceMappingURL=maps/MFC-MarkAllRead.js.map

@@ -19,23 +19,26 @@
 // @endif
 // @grant        none
 // ==/UserScript==
-// @if BUILD_TYPE="Prod"
-"use strict";
-const logo = "amiamilogo.png";
-
 (function()
 {
-	$("a img").each(function()
-	                {
-		                if($(this).attr("src").includes(logo))
-		                {
-			                $(this).click();
-		                }
-	                });
+	// @if BUILD_TYPE="Prod"
+	"use strict";
+	const logo = "amiamilogo.png";
 
-	$("h3 a").each(function()
-	               {
-		               location.href = $(this).attr("href");
-	               });
+	(function()
+	{
+		$("a img").each(function()
+		                {
+			                if($(this).attr("src").includes(logo))
+			                {
+				                $(this).click();
+			                }
+		                });
+
+		$("h3 a").each(function()
+		               {
+			               location.href = $(this).attr("href");
+		               });
+	})();
 })();
 // @endif

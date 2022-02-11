@@ -1,0 +1,16 @@
+{
+  "extends"        : "../tsconfig.json",
+  "baseUrl"        : "./",
+  "paths"          : {
+	"*": [
+	  "../../node_modules",
+	  "../../libraries"
+	]
+  },
+  "files"          : [
+	"*.ts"
+  ],
+  "compilerOptions": {
+	"outDir": "../../"
+  }
+}

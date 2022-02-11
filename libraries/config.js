@@ -1,25 +1,23 @@
 /* globals GM_config */
-const exists = typeof GM_config != "undefined";
-const types = ["number", "int", "integer", "float", "text", "textarea", "select", "button", "checkbox", "radio", "hidden"];
-const allowedProperties = {
-	all  : ["title", "labelPos"], text: ["size"], int: ["size", "min", "max"], float: ["size"], select: ["options"],
-	radio: ["options"], hidden: ["value"], button: ["size", "click"]
-};
-const allowedEvents = ["init","open","save","close","reset"];
 
-function checkProperty( type, key )
+let checkProperty = function(type, key)
 {
-	let allowableProperties = allowedProperties[type];
+	const allowedProperties = {
+		all  : ["title", "labelPos"], text: ["size"], int: ["size", "min", "max"], float: ["size"], select: ["options"],
+		radio: ["options"], hidden: ["value"], button: ["size", "click"]
+	};
 
-	if(!allowableProperties.includes(key))
+	if(!allowedProperties.includes(key))
 	{
-		throw "Invalid property '" + key + "'; allowed properties are: " + allowableProperties;
+		throw "Invalid property '" + key + "'; allowed properties are: " + allowedProperties;
 	}
-}
-//event open: document, window, frame
+};
 
-class Config
+let Config = class
 {
+	document;
+	window;
+
 	constructor(id, title)
 	{
 		this.id = id;
@@ -28,9 +26,9 @@ class Config
 		this.events = [];
 	}
 
-	add( name, label, typeIn, defaultValue, properties = null )
+	add(name, label, typeIn, defaultValue, properties = null)
 	{
-		this.addField( name, label, typeIn, defaultValue, properties);
+		this.addField(name, label, typeIn, defaultValue, properties);
 	}
 
 	addField(name, label, typeIn, defaultValue, properties = null)
@@ -46,25 +44,24 @@ class Config
 		}
 	}
 
-	setProperty( fieldIn, key, value )
+	setProperty(fieldIn, key, value)
 	{
-		if( !this.fields )
+		if(!this.fields)
 		{
 			throw "No fields exist";
 		}
 
 		//console.log(this.fields);
-		let field = this.fields.find(({ name }) => name === fieldIn);
-		let index = this.fields.indexOf( field );
+		let field = this.fields.find(({name}) => name === fieldIn);
 
-		if( !field )
+		if(!field)
 		{
-			throw "Field '"+fieldIn+"' not found; current fields are " + this.fields.map(x=>x.name);
+			throw "Field '" + fieldIn + "' not found; current fields are " + this.fields.map(x => x.name);
 		}
 
-		checkProperty( field.type, key );
+		checkProperty(field.type, key);
 
-		if( !field.properties )
+		if(!field.properties)
 		{
 			field.properties = {};
 		}
@@ -72,9 +69,9 @@ class Config
 		field.properties[key] = value;
 	}
 
-	event(name,callback)
+	event(name, callback)
 	{
-		this.addEvent(name,callback);
+		this.addEvent(name, callback);
 	}
 
 	addEvent(name, callback)
@@ -119,8 +116,7 @@ class Config
 
 			for(let propertyName in field.properties)
 			{
-				let propertyValue = field.properties[propertyName];
-				fieldObject[propertyName] = propertyValue;
+				fieldObject[propertyName] = field.properties[propertyName];
 			}
 
 			fieldsObject[field.name] = fieldObject;
@@ -142,7 +138,6 @@ class Config
 		for(let i in this.events)
 		{
 			let event = this.events[i];
-			let eventObject = {};
 
 			eventsObject[event.event] = event.callback;
 			hasEvents = true;
@@ -172,31 +167,12 @@ class Config
 			configObject.events = events;
 		}
 
-		if(exists)
-		{
-			GM_config.init(configObject);
-		}
-		else
-		{
-			console.log("GM_config init");
-			console.log( "As Object\n--------");
-			console.log(configObject);
-			console.log( "As raw\n------");
-			console.log( JSON.stringify(configObject) );
-		}
+		GM_config.init(configObject);
 	}
 
 	show()
 	{
-		if(exists)
-		{
-			GM_config.open();
-		}
-		else
-		{
-			console.log("GM_config open");
-		}
-
+		GM_config.open();
 		this.frame = GM_config.frame;
 
 		return new Promise(resolve =>
@@ -215,18 +191,20 @@ class Config
 	{
 		return GM_config.get(name);
 	}
-}
+};
 
-class ConfigEvent
+let ConfigEvent = class
 {
+	#allowedEvents = ["init", "open", "save", "close", "reset"];
+
 	constructor(event, callback)
 	{
-		if( !allowedEvents.includes( event ) )
+		if(!this.#allowedEvents.includes(event))
 		{
-			throw "Invalid event '"+event+"'; allowed events are " + allowedEvents;
+			throw "Invalid event '" + event + "'; allowed events are " + this.#allowedEvents;
 		}
 
-		if( !callback || !(callback instanceof Function) )
+		if(!callback || !(callback instanceof Function))
 		{
 			throw "Callback must be a valid function";
 		}
@@ -234,10 +212,13 @@ class ConfigEvent
 		this.event = event;
 		this.callback = callback;
 	}
-}
+};
 
-class ConfigField
+let ConfigField = class
 {
+	#types = ["number", "int", "integer", "float", "text", "textarea", "select", "button", "checkbox", "radio",
+	          "hidden"];
+
 	constructor(name, label, type, defaultValue = null, properties = null)
 	{
 		this.name = name;
@@ -260,23 +241,23 @@ class ConfigField
 			throw "Type required for " + name;
 		}
 
-		if(!types.includes(type))
+		if(!this.#types.includes(type))
 		{
-			throw "Invalid type '"+type+"'.  Valid types are: " + types;
+			throw "Invalid type '" + type + "'.  Valid types are: " + this.#types;
 		}
 
 		if(properties)
 		{
 			this.properties = {};
 
-			for( let propertyName in properties )
+			for(let propertyName in properties)
 			{
-				checkProperty( this.type, propertyName );
+				checkProperty(this.type, propertyName);
 				this.properties[propertyName] = properties[propertyName];
 			}
 		}
 	}
-}
+};
 
 /* Example
 

@@ -1,3 +1,4 @@
+"use strict";
 // ==UserScript==
 // @name         BuyFriend Redirect
 // @namespace    http://candicejoy.com/
@@ -11,21 +12,24 @@
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @grant        none
 // ==/UserScript==
-"use strict";
-const logo = "amiamilogo.png";
-
 (function()
 {
-	$("a img").each(function()
-	                {
-		                if($(this).attr("src").includes(logo))
+	"use strict";
+	const logo = "amiamilogo.png";
+	(function()
+	{
+		$("a img").each(function()
 		                {
-			                $(this).click();
-		                }
-	                });
-
-	$("h3 a").each(function()
-	               {
-		               location.href = $(this).attr("href");
-	               });
+			                if($(this).attr("src").includes(logo))
+			                {
+				                $(this).click();
+			                }
+		                });
+		$("h3 a").each(function()
+		               {
+			               location.href = $(this).attr("href");
+		               });
+	})();
 })();
+
+//# sourceMappingURL=maps/BuyfriendRedirect.js.map
