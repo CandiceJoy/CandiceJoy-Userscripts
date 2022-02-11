@@ -7,11 +7,8 @@
 // @match        https://myfigurecollection.net/notifications/*
 // @icon         https://static.myfigurecollection.net/ressources/assets/webicon.png
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @if BUILD_TYPE="Mac"
-// @require file:///Users/candice/WebstormProjects/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
-// @endif
-// @if BUILD_TYPE="PC"
-// @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
+// @if BUILD_TYPE="Dev"
+// @require /* @echo PATH*/MFC-MarkAllRead.user.js
 // @endif
 // @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
@@ -29,7 +26,7 @@
 
 	(function()
 	{
-		let button = document.createElement("button");
+		const button = document.createElement("button");
 		button.innerText = "Mark All As Read";
 		button.type = "button";
 		button.addEventListener("click", buttonClicked);

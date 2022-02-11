@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["add.ts"],"sourcesContent":["function addNumbers(a: number, b: number) \r\n{\r\n    return a + b;\r\n}\r\n\r\nconst sum: number = addNumbers(10, 15);\r\n\r\nconsole.log(`Sum of the two numbers is: ${sum}`);"],"file":"../add.ts"}

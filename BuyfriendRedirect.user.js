@@ -1,4 +1,3 @@
-"use strict";
 // ==UserScript==
 // @name         BuyFriend Redirect
 // @namespace    http://candicejoy.com/

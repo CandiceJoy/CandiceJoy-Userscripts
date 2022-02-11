@@ -1,6 +1,6 @@
 {
   "parser"       : "@babel/eslint-parser",
-  "extends"      : "eslint:recommended",
+  "extends"      : "../.eslintrc.json",
   "rules"        : {
 	"no-mixed-spaces-and-tabs": "off",
 	"require-await"           : "error",

@@ -1,14 +1,9 @@
-"use strict";
-var Test;
-(function(Test)
+function addNumbers(a, b)
 {
-	function addNumbers(a, b)
-	{
-		return a + b;
-	}
+	return a + b;
+}
 
-	const sum = addNumbers(10, 15);
-	console.log('Sum of the two numbers is: ' + sum);
-})(Test || (Test = {}));
+const sum = addNumbers(10, 15);
+console.log(`Sum of the two numbers is: ${sum}`);
 
 //# sourceMappingURL=maps/add.js.map

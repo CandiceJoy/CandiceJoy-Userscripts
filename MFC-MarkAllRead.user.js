@@ -1,4 +1,3 @@
-"use strict";
 // ==UserScript==
 // @name         MFC Mark All As Read
 // @namespace    http://candicejoy.com/
@@ -20,7 +19,7 @@
 	const iconSelector = ".icon-bell-slash";
 	(function()
 	{
-		let button = document.createElement("button");
+		const button = document.createElement("button");
 		button.innerText = "Mark All As Read";
 		button.type = "button";
 		button.addEventListener("click", buttonClicked);

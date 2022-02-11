@@ -9,7 +9,7 @@
 	"inlineSources"                   : false,
 	"allowUnreachableCode"            : false,
 	"allowUnusedLabels"               : false,
-	"alwaysStrict"                    : true,
+	"alwaysStrict"                    : false,
 	"noImplicitOverride"              : true,
 	"noImplicitThis"                  : false,
 	"allowJs"                         : true,

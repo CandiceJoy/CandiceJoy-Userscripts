@@ -8,11 +8,8 @@
 // @icon         https://www.google.com/s2/favicons?domain=amiami.com
 // @grant        none
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @if BUILD_TYPE="Mac"
-// @require file:///Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
-// @endif
-// @if BUILD_TYPE="PC"
-// @require file://c:/Users/candice/WebstormProjects/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
+// @if BUILD_TYPE="Dev"
+// @require /* @echo PATH*/AmiAmi-Refresher.user.js
 // @endif
 // @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
@@ -29,14 +26,8 @@
 	const refreshSeconds = 15; //seconds
 	//--== End User Editable ==--
 
-	const observerConfig = {
-		childList: true, subtree: true, attributes: true
-	};
-
-	const buttonSelector = 'button.btn-cart[style=""]';
-	const priceSelector = '.item-detail__price_selling-price';
-	const observer = new MutationObserver(observerFunc);
-	//const buyText = "add to cart";
+	const buttonSelector = "button.btn-cart[style=\"\"]";
+	const priceSelector = ".item-detail__price_selling-price";
 
 	const priceThreshold = 10000;
 	const refreshTimer = refreshSeconds * 1000;
@@ -46,23 +37,18 @@
 		                           location.reload();
 	                           }, refreshTimer);
 
-	(function()
-	{
-		observer.observe(document.querySelector("body"), observerConfig);
-	})();
-
 	function jancodeLink()
 	{
 		//console.log(nodes);
-		let ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
+		const ele = $(document).find(".item-about__data :contains('JAN code')").next(".item-about__data-text");
 
 		if(ele.length > 0)
 		{
-			let jancode = ele.text();
+			const jancode = ele.text();
 
 			if(jancode !== undefined && jancode !== null && jancode.trim() !== "")
 			{
-				let url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
+				const url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
 				$(ele).html(`<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>`);
 				return true;
 			}
@@ -78,7 +64,7 @@
 
 	function cartButton()
 	{
-		let cartButton = $(document).find(buttonSelector);
+		const cartButton = $(document).find(buttonSelector);
 
 		if(cartButton !== undefined && cartButton !== null)
 		{
@@ -101,22 +87,26 @@
 
 	function currencyConversion()
 	{
-		$.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/" + currency + ".json")
+		$.ajax(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json`)
 		 .always(function(data)
 		         {
-			         let conversionFactor = $(data).attr(currency);
-			         let newPrice = parseFloat(conversionFactor) * getPrice();
-			         let formatter = new Intl.NumberFormat('en-US', {
-				         style: 'currency', currency: currency.toUpperCase()
+			         const conversionFactor = $(data).attr(currency);
+			         const newPrice = parseFloat(conversionFactor) * getPrice();
+			         const formatter = new Intl.NumberFormat("en-US", {
+				         style: "currency", currency: currency.toUpperCase()
 			         });
-			         let finalPrice = formatter.format(newPrice);
+			         const finalPrice = formatter.format(newPrice);
 
-			         if(finalPrice != undefined)
+			         if(finalPrice !== undefined)
 			         {
 				         $(document).find(".item-detail__price_selling-price").text(finalPrice);
 			         }
 		         });
 	}
+
+	const observerConfig = {
+		childList: true, subtree: true, attributes: true
+	};
 
 	function observerFunc(mutations)
 	{
@@ -146,5 +136,12 @@
 			                  }
 		                  });
 	}
+
+	const observer = new MutationObserver(observerFunc);
+
+	(function()
+	{
+		observer.observe(document.querySelector("body"), observerConfig);
+	})();
 })();
 // @endif
