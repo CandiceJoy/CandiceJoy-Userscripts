@@ -7,8 +7,16 @@ const ts = require("gulp-typescript");
 const debug = require("gulp-debug");
 const sourcemaps = require("gulp-sourcemaps");
 const gulpESLintNew = require("gulp-eslint-new");
+const clean = require('gulp-clean');
 const tsProject = ts.createProject("src/ts/tsconfig.json");
 const jsProject = ts.createProject("src/js/tsconfig.json");
+
+gulp.task( "clean",function(callback){
+	gulp.src(["*.user.js","dev","maps","src/js/*.ts","src/js/*.tsx","src/ts/*.js","src/ts/*.jsx"],{allowEmpty:true})
+	    .pipe(debug({title:"Deleting"}))
+	    .pipe(clean({force: true}));
+	callback();
+});
 
 gulp.task("build", function(callback)
 {

@@ -8,7 +8,7 @@
 	]
   },
   "files"          : [
-	"*.js"
+	"*.js","*.jsx"
   ],
   "compilerOptions": {
 	"outDir": "../../"

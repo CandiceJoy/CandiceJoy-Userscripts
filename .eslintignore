@@ -3,3 +3,4 @@ maps
 node_modules
 src/types
 *.user.js
+/src/types/

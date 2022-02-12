@@ -8,9 +8,10 @@
 	]
   },
   "files"          : [
-	"*.ts", "*.tsx"
+	"*.ts","*.tsx"
   ],
   "compilerOptions": {
-	"outDir": "../../"
+	"outDir": "../../",
+	"typeRoots": ["../../node_modules/@types","../types"]
   }
 }

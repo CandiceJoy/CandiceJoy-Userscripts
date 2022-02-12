@@ -28,7 +28,7 @@
     const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
     const boxConditions = ["A", "B", "C", "N"];
     let configDoc;
-
+    
     GM_config.init({
         "id"   : "amiami-search-filter", // The id used for this instance of GM_config
         "title": "AmiAmi Search Filter Config", "fields": // Fields object
