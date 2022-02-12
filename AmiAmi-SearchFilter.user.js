@@ -152,7 +152,8 @@
                 .always(this.setup.bind(this));
         }
         setup(data, _textStatus, xhr) {
-            const root = JSON.parse(data);
+            debugger;
+            const root = data;
             const item = root.item;
             //Object.assign(this,root.item);
             //const item = this.item;

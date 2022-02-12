@@ -218,9 +218,9 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 			 .always(this.setup.bind(this));
 		}
 
-		setup(data: string, _textStatus: SuccessTextStatus|ErrorTextStatus, xhr: string|JQueryXHR): void
+		setup(data: object, _textStatus: SuccessTextStatus|ErrorTextStatus, xhr: string|JQueryXHR): void
 		{
-			const root: Readonly<RootObject> = JSON.parse(data);
+			const root: Readonly<RootObject> = data as RootObject;
 			const item: Readonly<Item> = root.item;
 
 			//Object.assign(this,root.item);
