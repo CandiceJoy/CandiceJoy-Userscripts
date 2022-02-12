@@ -35,7 +35,7 @@ gulp.task("headers", function(callback)
 function prodBuild(project)
 {
 	project.src()
-	       .pipe(debug({title: "Prod In"}))
+	       .pipe(debug({title: "Build In"}))
 	       .pipe(preprocess({context: {BUILD_TYPE: "Prod", PATH: process.cwd() + "/"}, showCount: false}))
 	       .pipe(gulpESLintNew({fix: true}))
 	       .pipe(gulpESLintNew.fix())
@@ -51,12 +51,13 @@ function prodBuild(project)
 		                    extname: ".user.js"
 	                    }))
 	       .pipe(gulp.dest("."))
-	       .pipe(debug({title: "Prod Out"}));
+	       .pipe(debug({title: "Build Out"}));
 }
 
 function devBuild(project)
 {
 	project.src()
+	       .pipe(debug({title: "Header"}))
 	       .pipe(preprocess({context: {BUILD_TYPE: "Dev", PATH: process.cwd() + "/"}, showCount: false}))
 	       .pipe(rename({
 		                    extname: ".user.js"
