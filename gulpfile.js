@@ -8,11 +8,10 @@ const debug = require("gulp-debug");
 const sourcemaps = require("gulp-sourcemaps");
 const gulpESLintNew = require("gulp-eslint-new");
 const clean = require('gulp-clean');
-const tsProject = ts.createProject("src/ts/tsconfig.json");
-const jsProject = ts.createProject("src/js/tsconfig.json");
+const project = ts.createProject("tsconfig.json");
 
 gulp.task( "clean",function(callback){
-	gulp.src(["*.user.js","dev","maps","src/js/*.ts","src/js/*.tsx","src/ts/*.js","src/ts/*.jsx"],{allowEmpty:true})
+	gulp.src(["*.user.js","dev","maps","src/*.js","src/*.jsx"],{allowEmpty:true})
 	    .pipe(debug({title:"Deleting"}))
 	    .pipe(clean({force: true}));
 	callback();
@@ -20,15 +19,13 @@ gulp.task( "clean",function(callback){
 
 gulp.task("build", function(callback)
 {
-	prodBuild(tsProject);
-	prodBuild(jsProject);
+	prodBuild(project);
 	callback();
 });
 
 gulp.task("headers", function(callback)
 {
-	devBuild(tsProject);
-	devBuild(jsProject);
+	devBuild(project);
 	callback();
 });
 
@@ -46,10 +43,10 @@ function prodBuild(project)
 	       {
 		       console.log(err.message);
 	       }))
-	       .pipe(sourcemaps.write("maps/"))
 	       .pipe(rename({
 		                    extname: ".user.js"
 	                    }))
+	       .pipe(sourcemaps.write("./maps"))
 	       .pipe(gulp.dest("."))
 	       .pipe(debug({title: "Build Out"}));
 }

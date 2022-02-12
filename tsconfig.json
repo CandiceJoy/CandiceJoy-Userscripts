@@ -28,7 +28,7 @@
 	"listFiles"                       : true,
 	"listEmittedFiles"                : true,
 	"forceConsistentCasingInFileNames": true,
-	"outDir"                          : "../",
+	"outDir"                          : "./dev/build",
 	"strictFunctionTypes"             : true,
 	"noImplicitUseStrict"             : false,
 	"jsx"                             : "react",
@@ -40,9 +40,13 @@
 	"baseUrl"                         : "./",
 	"paths"                           : {
 	  "*": [
-		"../node_modules/*",
-		"../libraries/*"
+		"./node_modules/*",
+		"./libraries/*",
+		"./types/*"
 	  ]
-	}
-  }
+	},
+  },
+  "files": ["src/AmiAmi-Refresher.ts","src/AmiAmi-SearchFilter.ts","src/BuyfriendRedirect.ts",
+	"src/MFC-MarkAllRead.ts"
+  ]
 }

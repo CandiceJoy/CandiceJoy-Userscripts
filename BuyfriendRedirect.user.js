@@ -1,3 +1,4 @@
+"use strict";
 // ==UserScript==
 // @name         BuyFriend Redirect
 // @namespace    http://candicejoy.com/
@@ -13,17 +14,19 @@
 // ==/UserScript==
 (function () {
     "use strict";
-    var logo = "amiamilogo.png";
+    const logo = "amiamilogo.png";
     $("a img").each(function () {
-        var attr = $(this).attr("src");
+        const attr = $(this).attr("src");
         if (attr && attr.includes(logo)) {
             $(this).trigger("click");
         }
     });
     $("h3 a").each(function () {
-        var attr = $(this).attr("href");
+        const attr = $(this).attr("href");
         if (attr) {
             location.href = attr;
         }
     });
 })();
+
+//# sourceMappingURL=maps/BuyfriendRedirect.user.js.map

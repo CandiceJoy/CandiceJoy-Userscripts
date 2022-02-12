@@ -1,22 +1,4 @@
 "use strict";
-// ==UserScript==
-// @name         AmiAmi Search Filter
-// @namespace    http://candicejoy.com/
-// @version      1.1
-// @description  Search assistant for AmiAmi
-// @author       CandiceJoy
-// @match        https://www.amiami.com/eng/search/list/*
-// @icon         https://www.google.com/s2/favicons?domain=amiami.com
-// @grant              GM_getValue
-// @grant              GM_setValue
-// @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @require https://openuserjs.org/src/libs/sizzle/GM_config.js
-// @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
-// @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @run-at document-idle
-// ==/UserScript==
-/* globals GM_config */
-// !!!!!!!include ../libraries/config.js
 (function () {
     "use strict";
     const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
@@ -72,33 +54,50 @@
                 $(configDoc).find("#amiami-search-filter_field_exclude").attr("cols", "20");
                 $(configDoc).find("#amiami-search-filter_field_dontExclude").attr("cols", "20");
                 $(configDoc).find("textarea").each(function () {
-                    $(this).height($(this)[0].scrollHeight + 20);
+                    const scroll = $(this)[0];
+                    if (scroll) {
+                        $(this)
+                            .height(scroll.scrollHeight + 20);
+                    }
                 });
             }, "save": function () {
                 $(configDoc).find("textarea").each(function () {
-                    $(this).height($(this)[0].scrollHeight + 20);
+                    const scroll = $(this)[0];
+                    if (scroll) {
+                        $(this)
+                            .height(scroll.scrollHeight + 20);
+                    }
                 });
-                if ($(configDoc).find("#amiami-search-filter_field_currency").val().length !== 3) {
+                const currencyValue = $(configDoc)
+                    .find("#amiami-search-filter_field_currency")
+                    .val();
+                if (currencyValue && currencyValue.toString().length !== 3) {
                     alert("Currency must be 3 letters");
                 }
-                if (parseInt($(configDoc).find("#amiami-search-filter_field_priceThreshold").val()) >=
-                    50000) {
+                const priceThresholdValue = $(configDoc)
+                    .find("#amiami-search-filter_field_priceThreshold")
+                    .val();
+                if (priceThresholdValue && parseInt(priceThresholdValue.toString()
+                    .toString()) >= 50000) {
                     alert("Price threshold too high");
                 }
-                if (parseInt($(configDoc).find("#amiami-search-filter_field_highlightPrice").val()) <=
-                    500) {
+                const highlightPriceValue = $(configDoc)
+                    .find("#amiami-search-filter_field_highlightPrice")
+                    .val();
+                if (highlightPriceValue && parseInt(highlightPriceValue.toString()
+                    .toString()) <= 500) {
                     alert("Highlight price too low");
                 }
             }
         }
     });
-    const allowedItemConditions = GM_config.get("allowedItemConditions"); //letters only
-    const allowedBoxConditions = GM_config.get("allowedBoxConditions"); //letters only
-    const currency = GM_config.get("currency").toLowerCase(); //lowercase, 3 letter
-    const priceThreshold = GM_config.get("priceThreshold"); //exclude prices > this (yen)
-    const highlightPrice = GM_config.get("highlightPrice"); //highlight prices <= this (yen)
-    const alwaysExclude = (GM_config.get("exclude")) ? GM_config.get("exclude").split("\n") : [];
-    const dontExclude = (GM_config.get("dontExclude")) ? GM_config.get("dontExclude").split("\n") : [];
+    const allowedItemConditions = GM_config.get("allowedItemConditions").toString(); //letters only
+    const allowedBoxConditions = GM_config.get("allowedBoxConditions").toString(); //letters only
+    const currency = GM_config.get("currency").toString().toLowerCase(); //lowercase, 3 letter
+    const priceThreshold = parseInt(GM_config.get("priceThreshold").toString()); //exclude prices > this (yen)
+    const highlightPrice = parseInt(GM_config.get("highlightPrice").toString()); //highlight prices <= this (yen)
+    const alwaysExclude = (GM_config.get("exclude")) ? GM_config.get("exclude").toString().split("\n") : [];
+    const dontExclude = (GM_config.get("dontExclude")) ? GM_config.get("dontExclude").toString().split("\n") : [];
     const itemSelector = ".newly-added-items__item";
     const pagerSelector = ".pager_mb,.pager-list";
     const pagerNumSelector = "li.pager-list__item_num";
@@ -119,7 +118,7 @@
                 update(mutation.addedNodes);
                 $(".header-head__menu")
                     .prepend("<button style='font-size: 15px;'>Filter Config</button>")
-                    .click(function () {
+                    .on("click", function () {
                     GM_config.open();
                 });
             }
@@ -127,60 +126,97 @@
     }
     const observer = new MutationObserver(observerFunc);
     const basePath = `${window.location.protocol}//${window.location.host}`;
-    class Item {
-        constructor(gcode, link) {
-            this.url = basePath + link;
+    class AmiAmiItem {
+        //private resale: number| undefined;
+        //private scode: string| undefined;
+        //private sname: string| undefined;
+        constructor(gcode, element) {
+            //private url: string;
+            this.mfc = "";
+            this.itemCondition = "";
+            this.boxCondition = "";
+            //private item: Item | undefined;
+            this.name = "";
+            this.jancode = "";
+            this.instock = true;
+            this.price = 0;
+            this.buy = true;
+            //private preowned: boolean| undefined;
+            this.closed = false;
+            //this.url = basePath + link;
             this.gcode = gcode;
-            $.ajax(`https://api.amiami.com/api/v1.0/item?gcode=${gcode}`, { dataType: "json", headers: { "x-user-key": "amiami_dev" } })
+            this.element = element;
+        }
+        init() {
+            $.ajax(`https://api.amiami.com/api/v1.0/item?gcode=${this.gcode}`, { dataType: "json", headers: { "x-user-key": "amiami_dev" } })
                 .always(this.setup.bind(this));
         }
-        setup(data, textStatus, xhr) {
-            if (xhr.status !== 200) {
+        setup(data, _textStatus, xhr) {
+            const root = JSON.parse(data);
+            const item = root.item;
+            //Object.assign(this,root.item);
+            //const item = this.item;
+            if (typeof xhr !== "string" && xhr.status !== 200) {
                 console.log(`API Call Failed [${this.gcode}]`);
                 return;
             }
-            this.item = data.item;
-            const item = this.item;
+            //this.item = item;
             this.name = item.gname;
             this.jancode = item.jancode;
             this.instock = item.instock_flg > 0;
             this.price = item.price;
             this.buy = item.buy_flg > 0;
-            this.preowned = item.condition_flg === 1;
-            this.closed = item.order_closed_flg;
-            this.resale = item.resale_flg;
-            this.scode = item.scode;
+            //this.preowned = item.condition_flg === 1;
+            this.closed = item.order_closed_flg === 1;
+            //this.resale = item.resale_flg;
+            //this.scode = item.scode;
             this.mfc = `https://myfigurecollection.net/browse.v4.php?keywords=${this.jancode}`;
-            this.sname = item.sname;
-            this.itemCondition = new RegExp(itemConditionRegex).exec(item.sname)[1];
-            this.boxCondition = new RegExp(boxConditionRegex).exec(item.sname)[1];
+            //this.sname = item.sname;
+            const itemConditionParseResults = itemConditionRegex.exec(item.sname);
+            if (itemConditionParseResults) {
+                const condition = itemConditionParseResults[1];
+                if (condition) {
+                    this.itemCondition = condition;
+                }
+            }
+            const boxConditionParseResults = boxConditionRegex.exec(item.sname);
+            if (boxConditionParseResults) {
+                const condition = boxConditionParseResults[1];
+                if (condition) {
+                    this.boxCondition = condition;
+                }
+            }
             const ele = this.element;
             const tags = $(ele).find(".newly-added-items__item__tag-list__item:not([style]), .newly-added-items__item__tag-list__item[style='']");
             $.ajax(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json`)
-                .always(function (data) {
+                .always((data) => {
                 const conversionFactor = $(data).attr(currency);
-                const newPrice = parseFloat(conversionFactor) * this.price;
+                let newPrice = -1;
+                if (conversionFactor) {
+                    newPrice = parseFloat(conversionFactor) * this.price;
+                }
                 const formatter = new Intl.NumberFormat("en-US", {
                     style: "currency", currency: currency.toUpperCase()
                 });
-                this.convertedPrice = formatter.format(newPrice);
-                if (this.convertedPrice !== undefined) {
-                    $(this.element).find(".newly-added-items__item__price").text(this.convertedPrice);
+                const convertedPrice = formatter.format(newPrice);
+                if (convertedPrice !== undefined) {
+                    $(this.element).find(".newly-added-items__item__price").text(convertedPrice);
                     $(this.element).find(".newly-added-items__item__price_state_currency").hide();
                 }
-            }.bind(this));
-            tags.each((key, val) => {
+            });
+            tags.each((_key, val) => {
                 const text = val.innerText.toLowerCase();
                 if (text.includes(orderClosed.toLowerCase())) {
                     this.closed = true;
-                    console.log(`${name}: Order Closed[tag]`);
+                    console.log(`${this.name}: Order Closed[tag]`);
                 }
             });
             const aTags = ele.getElementsByTagName("span");
             const searchText = " ";
             for (let i = 0; i < aTags.length; i++) {
-                if (aTags[i].textContent === searchText) {
-                    $(aTags[i]).hide();
+                const tag = aTags[i];
+                if (tag && tag.textContent === searchText) {
+                    $(tag).hide();
                     break;
                 }
             }
@@ -189,7 +225,11 @@
         processItem() {
             //Process Always Exclude List
             for (const y in alwaysExclude) {
-                const exclude2 = alwaysExclude[y].toLowerCase();
+                const currentExclude = alwaysExclude[y];
+                let exclude2 = "";
+                if (currentExclude) {
+                    exclude2 = currentExclude.toLowerCase();
+                }
                 if (this.name.toLowerCase().indexOf(exclude2) > -1) {
                     console.log(`${this.name}: Always exclude [${exclude2}]`);
                     return;
@@ -206,13 +246,17 @@
                 return;
             }
             //Process Price Missing
-            if (this.price === undefined || this.price === "") {
+            if (this.price === undefined || this.price.toString() === "") {
                 console.log(`${this.name}: Can't find price [${this.price}]`);
                 return;
             }
             //Process Don't Exclude List
             for (const x in dontExclude) {
-                const exclude1 = dontExclude[x].toLowerCase();
+                const currentExclude = dontExclude[x];
+                let exclude1 = "";
+                if (currentExclude) {
+                    exclude1 = currentExclude.toLowerCase();
+                }
                 if (this.name.toLowerCase().indexOf(exclude1) > -1) {
                     console.log(`${this.name}: Don't exclude [${exclude1}]`);
                     this.show();
@@ -226,12 +270,12 @@
                 return;
             }
             //Process Item Condition
-            if (itemConditions.indexOf(this.itemCondition) > allowedItemConditions) {
+            if (itemConditions.indexOf(this.itemCondition) > itemConditions.indexOf(allowedItemConditions)) {
                 console.log(`${this.name}: Item Condition [${this.itemCondition}]`);
                 return;
             }
             //Process Box Condition
-            if (boxConditions.indexOf(this.boxCondition) > allowedBoxConditions) {
+            if (boxConditions.indexOf(this.boxCondition) > itemConditions.indexOf(allowedBoxConditions)) {
                 console.log(`${this.name}: Box Condition [${this.boxCondition}]`);
                 return;
             }
@@ -242,7 +286,7 @@
             this.addTag(`Item: ${this.itemCondition}`);
             this.addTag(`Box: ${this.boxCondition}`);
             const mfcTag = this.addTag(`<a href="${this.mfc}">MFC</a>`);
-            $(mfcTag).click(function (e) {
+            $(mfcTag).on("click", function (e) {
                 e.stopImmediatePropagation();
             });
             if (this.price <= highlightPrice) {
@@ -263,12 +307,19 @@
         }
     }
     (function () {
-        observer.observe(document.querySelector("body"), observerConfig);
+        const body = document.querySelector("body");
+        if (body) {
+            observer.observe(body, observerConfig);
+        }
     })();
     function processButtons() {
         const url = new URL(location.href);
         const urlParams = url.searchParams;
-        const page = parseInt(urlParams.get("pagecnt"));
+        const pageParam = urlParams.get("pagecnt");
+        if (!pageParam) {
+            return;
+        }
+        const page = parseInt(pageParam);
         const maxPage = parseInt($(pagerNumSelector).last().text());
         $(pagerSelector).children().each(function () {
             $(this).hide();
@@ -281,7 +332,7 @@
                 firstButton.classList.add("candibutton");
                 firstButton.addEventListener("click", function () {
                     urlParams.set("pagecnt", "1");
-                    location.href = url;
+                    location.href = url.toString();
                 });
                 $(this).append(firstButton);
             });
@@ -303,8 +354,8 @@
                 prevButton.type = "button";
                 prevButton.classList.add("candibutton");
                 prevButton.addEventListener("click", function () {
-                    urlParams.set("pagecnt", page - 1);
-                    location.href = url;
+                    urlParams.set("pagecnt", (page - 1).toString());
+                    location.href = url.toString();
                 });
                 $(this).append(prevButton);
             });
@@ -316,14 +367,15 @@
                 nextButton.type = "button";
                 nextButton.classList.add("candibutton");
                 nextButton.addEventListener("click", function () {
-                    urlParams.set("pagecnt", page + 1);
-                    location.href = url;
+                    urlParams.set("pagecnt", (page + 1).toString());
+                    location.href = url.toString();
                 });
                 $(this).append(nextButton);
             });
         }
-        $(".candibutton").css("margin-right", "10px");
-        $(".candibutton").css("margin-left", "10px");
+        const candibutton = $(".candibutton");
+        candibutton.css("margin-right", "10px");
+        candibutton.css("margin-left", "10px");
         $(pagerSelector).prepend(`</p>${page}/${maxPage}</p>`);
     }
     function update(node) {
@@ -332,10 +384,12 @@
             const link = href.attr("href");
             const urlParams = new URL(basePath + link).searchParams;
             const gcode = urlParams.get(gcodeID);
-            const item = new Item(gcode, link);
-            item.element = this;
+            if (gcode && link) {
+                const item = new AmiAmiItem(gcode, this);
+                item.init();
+            }
         });
     }
 })();
 
-//# sourceMappingURL=maps/AmiAmi-SearchFilter.js.map
+//# sourceMappingURL=maps/AmiAmi-SearchFilter.user.js.map

@@ -16,17 +16,17 @@
 {
 	"use strict";
 	//--== User Editable ==--
-	const currency = "usd";
-	const refreshSeconds = 15; //seconds
+	const currency: string = "usd";
+	const refreshSeconds: number = 15; //seconds
 	//--== End User Editable ==--
 
-	const buttonSelector = "button.btn-cart[style=\"\"]";
-	const priceSelector = ".item-detail__price_selling-price";
+	const buttonSelector: string = "button.btn-cart[style=\"\"]";
+	const priceSelector: string = ".item-detail__price_selling-price";
 
-	const priceThreshold = 10000;
+	const priceThreshold: number = 10000;
 	const refreshTimer: number = refreshSeconds * 1000;
 
-	const timeout: NodeJS.Timeout = setTimeout( function ()
+	const timeout: NodeJS.Timeout = setTimeout( function (): void
 	                                            {
 		                                            location.reload();
 	                                            }, refreshTimer );
@@ -44,7 +44,7 @@
 
 			if ( jancode !== undefined && jancode !== null && jancode.trim() !== "" )
 			{
-				const url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
+				const url: string = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
 				$( ele ).html( `<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>` );
 				return true;
 			}
@@ -84,7 +84,7 @@
 	function currencyConversion(): void
 	{
 		$.ajax( `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json` )
-		 .always( function ( data )
+		 .always( function ( data: any): void
 		          {
 					  const result: string|undefined = $( data ).attr( currency );
 			          let conversionFactor: string;
@@ -117,10 +117,10 @@
 
 	function observerFunc( mutations: MutationRecord[] ): void
 	{
-		let done1 = false;
-		let done2 = false;
+		let done1: boolean = false;
+		let done2: boolean = false;
 
-		mutations.forEach( () =>
+		mutations.forEach( (): void =>
 		                   {
 			                   if ( done1 && done2 )
 			                   {

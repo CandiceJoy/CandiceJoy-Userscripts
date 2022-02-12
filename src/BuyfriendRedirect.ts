@@ -14,7 +14,7 @@
 ( function (): void
 {
 	"use strict";
-	const logo = "amiamilogo.png";
+	const logo: string = "amiamilogo.png";
 
 	$( "a img" ).each( function (): void
 	                   {

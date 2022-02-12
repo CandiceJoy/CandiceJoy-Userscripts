@@ -12,15 +12,15 @@
 // @grant        none
 // ==/UserScript==
 /// <reference types="react-dom/server" />
-(function()
+(function(): void
 {
 	"use strict";
 
-	const headerSelector = "#main";
-	const activitySelector = ".activity-wrapper";
-	const iconSelector = ".icon-bell-slash";
+	const headerSelector: string = "#main";
+	const activitySelector: string = ".activity-wrapper";
+	const iconSelector: string = ".icon-bell-slash";
 
-	(function()
+	(function(): void
 	{
 		const button:HTMLButtonElement = document.createElement("button");
 		button.innerText = "Mark All As Read";
@@ -31,7 +31,7 @@
 
 	function buttonClicked():void
 	{
-		$(document).find(activitySelector).find(iconSelector).each(function()
+		$(document).find(activitySelector).find(iconSelector).each(function(): void
 		                                                           {
 			                                                           $(this).trigger("click");
 		                                                           });
