@@ -9,9 +9,9 @@
 	"inlineSources"                   : false,
 	"allowUnreachableCode"            : false,
 	"allowUnusedLabels"               : false,
-	"alwaysStrict"                    : false,
+	"alwaysStrict"                    : true,
 	"noImplicitOverride"              : true,
-	"noImplicitThis"                  : false,
+	"noImplicitThis"                  : true,
 	"allowJs"                         : true,
 	"checkJs"                         : false,
 	"noUnusedLocals"                  : true,
@@ -29,6 +29,9 @@
 	"listEmittedFiles"                : true,
 	"forceConsistentCasingInFileNames": true,
 	"outDir"                          : "../",
+	"strictFunctionTypes"             : true,
+	"noImplicitUseStrict"             : false,
+	"jsx"                             : "react",
 	"lib"                             : [
 	  "DOM",
 	  "ES2021"

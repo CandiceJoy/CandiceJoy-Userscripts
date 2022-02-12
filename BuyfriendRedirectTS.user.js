@@ -29,4 +29,4 @@
     });
 })();
 
-//# sourceMappingURL=maps/BuyfriendRedirect.js.map
+//# sourceMappingURL=maps/BuyfriendRedirectTS.js.map

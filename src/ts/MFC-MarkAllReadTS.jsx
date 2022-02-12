@@ -1,4 +1,3 @@
-"use strict";
 // ==UserScript==
 // @name         MFC Mark All As Read
 // @namespace    http://candicejoy.com/
@@ -14,21 +13,21 @@
 // ==/UserScript==
 (function () {
     "use strict";
-    const headerSelector = "#main";
-    const activitySelector = ".activity-wrapper";
-    const iconSelector = ".icon-bell-slash";
+    var headerSelector = "#main";
+    var activitySelector = ".activity-wrapper";
+    var iconSelector = ".icon-bell-slash";
     (function () {
-        const button = document.createElement("button");
+        /*const button:HTMLButtonElement = document.createElement("button");
         button.innerText = "Mark All As Read";
         button.type = "button";
-        button.addEventListener("click", buttonClicked);
-        $(headerSelector).prepend(button);
+        $(headerSelector).prepend(button);*/
+        var button = <button type='button' onClick={buttonClicked}>Mark All As Read</button>;
+        var buttonElement = ReactDOMServer.renderToStaticMarkup(button);
+        $(headerSelector).prepend(buttonElement);
     })();
     function buttonClicked() {
         $(document).find(activitySelector).find(iconSelector).each(function () {
-            $(this).click();
+            $(this).trigger("click");
         });
     }
 })();
-
-//# sourceMappingURL=maps/MFC-MarkAllRead.js.map

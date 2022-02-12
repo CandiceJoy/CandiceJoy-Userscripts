@@ -18,17 +18,24 @@
     const activitySelector = ".activity-wrapper";
     const iconSelector = ".icon-bell-slash";
     (function () {
-        const button = document.createElement("button");
+        /*const button = document.createElement("button");
         button.innerText = "Mark All As Read";
-        button.type = "button";
-        button.addEventListener("click", buttonClicked);
-        $(headerSelector).prepend(button);
+        button.type = "button";*/
+        //const button: HTMLElement = <button type='button' onClick={buttonClicked}>Mark All As Read</button>;
+        //$(headerSelector).prepend(button);
+        //const thing:JSX.Element = <div ref={(ref) => { this.myDiv = ref; }}  />
+        //$("body").append(this.myDiv);
+        const button = React.createElement("button", { type: 'button', onClick: buttonClicked }, "Mark All As Read");
+        const insert = $(headerSelector).get(0);
+        if (insert) {
+            ReactDOM.render(button, insert);
+        }
     })();
     function buttonClicked() {
         $(document).find(activitySelector).find(iconSelector).each(function () {
-            $(this).click();
+            $(this).trigger("click");
         });
     }
 })();
 
-//# sourceMappingURL=maps/MFC-MarkAllRead.js.map
+//# sourceMappingURL=maps/MFC-MarkAllReadTS.js.map

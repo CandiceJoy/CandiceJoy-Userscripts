@@ -7,35 +7,23 @@
 // @match        https://buyfriend.moe/search?search=https://www.amiami.com/eng/detail/?*
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=amiami.com
-// @if BUILD_TYPE="Dev"
-// @require /* @echo PATH*/BuyfriendRedirect.user.js
-// @endif
-// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/BuyfriendRedirect.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @endif
 // @grant        none
 // ==/UserScript==
-// @if BUILD_TYPE="Prod"
-(function()
-{
-	"use strict";
-	const logo = "amiamilogo.png";
-
-	(function()
-	{
-		$("a img").each(function()
-		                {
-			                if($(this).attr("src").includes(logo))
-			                {
-				                $(this).click();
-			                }
-		                });
-
-		$("h3 a").each(function()
-		               {
-			               location.href = $(this).attr("href");
-		               });
-	})();
+(function () {
+    "use strict";
+    var logo = "amiamilogo.png";
+    $("a img").each(function () {
+        var attr = $(this).attr("src");
+        if (attr && attr.includes(logo)) {
+            $(this).trigger("click");
+        }
+    });
+    $("h3 a").each(function () {
+        var attr = $(this).attr("href");
+        if (attr) {
+            location.href = attr;
+        }
+    });
 })();
-// @endif

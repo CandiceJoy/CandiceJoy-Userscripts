@@ -1,4 +1,3 @@
-"use strict";
 // ==UserScript==
 // @name         MFC Mark All As Read
 // @namespace    http://candicejoy.com/
@@ -8,19 +7,30 @@
 // @match        https://myfigurecollection.net/notifications/*
 // @icon         https://static.myfigurecollection.net/ressources/assets/webicon.png
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
+// @if BUILD_TYPE="Dev"
+// @require /* @echo PATH*/MFC-MarkAllRead.user.js
+// @endif
+// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
+// @endif
 // @grant        none
 // ==/UserScript==
+// @if BUILD_TYPE="Prod"
 (function () {
     "use strict";
-    const headerSelector = "#main";
-    const activitySelector = ".activity-wrapper";
-    const iconSelector = ".icon-bell-slash";
+    var headerSelector = "#main";
+    var activitySelector = ".activity-wrapper";
+    var iconSelector = ".icon-bell-slash";
     (function () {
-        const button = document.createElement("button");
+        /*const button = document.createElement("button");
         button.innerText = "Mark All As Read";
-        button.type = "button";
+        button.type = "button";*/
+        var button = type;
+        'button' > Mark;
+        All;
+        As;
+        Read < /button>;;
         button.addEventListener("click", buttonClicked);
         $(headerSelector).prepend(button);
     })();
@@ -30,5 +40,4 @@
         });
     }
 })();
-
-//# sourceMappingURL=maps/MFC-MarkAllRead.js.map
+// @endif

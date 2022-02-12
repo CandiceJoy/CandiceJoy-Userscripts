@@ -8,7 +8,7 @@
 	]
   },
   "files"          : [
-	"*.ts"
+	"*.ts", "*.tsx"
   ],
   "compilerOptions": {
 	"outDir": "../../"

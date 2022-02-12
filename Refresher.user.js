@@ -64,7 +64,7 @@
             .always(function (data) {
             const result = $(data).attr(currency);
             let conversionFactor;
-            if (result) {
+            if (result !== undefined) {
                 conversionFactor = result;
             }
             else {
@@ -111,4 +111,4 @@
     })();
 })();
 
-//# sourceMappingURL=maps/AmiAmi-Refresher.js.map
+//# sourceMappingURL=maps/Refresher.js.map

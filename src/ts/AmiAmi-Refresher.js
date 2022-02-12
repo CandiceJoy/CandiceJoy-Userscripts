@@ -1,4 +1,3 @@
-"use strict";
 // ==UserScript==
 // @name         AmiAmi Refresher
 // @namespace    http://candicejoy.com/
@@ -16,26 +15,26 @@
 (function () {
     "use strict";
     //--== User Editable ==--
-    const currency = "usd";
-    const refreshSeconds = 15; //seconds
+    var currency = "usd";
+    var refreshSeconds = 15; //seconds
     //--== End User Editable ==--
-    const buttonSelector = "button.btn-cart[style=\"\"]";
-    const priceSelector = ".item-detail__price_selling-price";
-    const priceThreshold = 10000;
-    const refreshTimer = refreshSeconds * 1000;
-    const timeout = setTimeout(function () {
+    var buttonSelector = "button.btn-cart[style=\"\"]";
+    var priceSelector = ".item-detail__price_selling-price";
+    var priceThreshold = 10000;
+    var refreshTimer = refreshSeconds * 1000;
+    var timeout = setTimeout(function () {
         location.reload();
     }, refreshTimer);
     function jancodeLink() {
         //console.log(nodes);
-        const ele = $(document)
+        var ele = $(document)
             .find(".item-about__data :contains('JAN code')")
             .next(".item-about__data-text");
         if (ele.length > 0) {
-            const jancode = ele.text();
+            var jancode = ele.text();
             if (jancode !== undefined && jancode !== null && jancode.trim() !== "") {
-                const url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
-                $(ele).html(`<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>`);
+                var url = "https://myfigurecollection.net/browse.v4.php?keywords=".concat(jancode);
+                $(ele).html("<a href=\"javascript: window.open('".concat(url, "', '_blank').focus();\">").concat(jancode, "</a>"));
                 return true;
             }
         }
@@ -45,7 +44,7 @@
         return parseInt($(priceSelector).text().replace("JPY", "").replace(",", ""));
     }
     function cartButton() {
-        const cartButton = $(document).find(buttonSelector);
+        var cartButton = $(document).find(buttonSelector);
         if (cartButton !== undefined && cartButton !== null) {
             if (getPrice() > priceThreshold) {
                 clearTimeout(timeout);
@@ -60,33 +59,33 @@
         return false;
     }
     function currencyConversion() {
-        $.ajax(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json`)
+        $.ajax("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/".concat(currency, ".json"))
             .always(function (data) {
-            const result = $(data).attr(currency);
-            let conversionFactor;
+            var result = $(data).attr(currency);
+            var conversionFactor;
             if (result) {
                 conversionFactor = result;
             }
             else {
                 return;
             }
-            const newPrice = parseFloat(conversionFactor) * getPrice();
-            const formatter = new Intl.NumberFormat("en-US", {
+            var newPrice = parseFloat(conversionFactor) * getPrice();
+            var formatter = new Intl.NumberFormat("en-US", {
                 style: "currency", currency: currency.toUpperCase()
             });
-            const finalPrice = formatter.format(newPrice);
+            var finalPrice = formatter.format(newPrice);
             if (finalPrice !== undefined) {
                 $(document).find(".item-detail__price_selling-price").text(finalPrice);
             }
         });
     }
-    const observerConfig = {
+    var observerConfig = {
         childList: true, subtree: true, attributes: true
     };
     function observerFunc(mutations) {
-        let done1 = false;
-        let done2 = false;
-        mutations.forEach(() => {
+        var done1 = false;
+        var done2 = false;
+        mutations.forEach(function () {
             if (done1 && done2) {
                 return;
             }
@@ -102,13 +101,11 @@
             }
         });
     }
-    const observer = new MutationObserver(observerFunc);
+    var observer = new MutationObserver(observerFunc);
     (function () {
-        const body = document.querySelector("body");
+        var body = document.querySelector("body");
         if (body !== null) {
             observer.observe(body, observerConfig);
         }
     })();
 })();
-
-//# sourceMappingURL=maps/AmiAmi-Refresher.js.map
