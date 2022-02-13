@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-	"module"                          : "system",
+	"module"                          : "CommonJS",
 	"noImplicitAny"                   : true,
 	"removeComments"                  : false,
 	"preserveConstEnums"              : true,
-	"sourceMap"                       : true,
+	"sourceMap"                       : false,
 	"inlineSourceMap"                 : false,
 	"inlineSources"                   : false,
 	"allowUnreachableCode"            : false,
@@ -12,23 +12,24 @@
 	"alwaysStrict"                    : true,
 	"noImplicitOverride"              : true,
 	"noImplicitThis"                  : true,
-	"allowJs"                         : true,
+	"allowJs"                         : false,
 	"checkJs"                         : false,
+	"traceResolution"                 : true,
 	"noUnusedLocals"                  : true,
 	"noUnusedParameters"              : true,
 	"noUncheckedIndexedAccess"        : true,
 	"noEmitOnError"                   : true,
 	"strict"                          : true,
 	"strictNullChecks"                : true,
-	"strictPropertyInitialization"    : true,
+	"declarationMap"                  : false,
+	"strictPropertyInitialization"    : false,
 	"strictBindCallApply"             : true,
 	"pretty"                          : true,
 	"target"                          : "ES2021",
-	"mapRoot"                         : "maps",
 	"listFiles"                       : true,
 	"listEmittedFiles"                : true,
 	"forceConsistentCasingInFileNames": true,
-	"outDir"                          : "./dev/build",
+	"outDir"                          : "./*.user.js",
 	"strictFunctionTypes"             : true,
 	"noImplicitUseStrict"             : false,
 	"jsx"                             : "react",
@@ -36,17 +37,27 @@
 	  "DOM",
 	  "ES2021"
 	],
+	"typeRoots"                       : [
+	  "node_modules/@types",
+	  "src/types",
+	  "src/libs"
+	],
 	"moduleResolution"                : "node",
 	"baseUrl"                         : "./",
 	"paths"                           : {
 	  "*": [
 		"./node_modules/*",
-		"./libraries/*",
-		"./types/*"
+		"./src/libs/*"
 	  ]
-	},
+	}
   },
-  "files": ["src/AmiAmi-Refresher.ts","src/AmiAmi-SearchFilter.ts","src/BuyfriendRedirect.ts",
+  "files"          : [
+	"src/AmiAmi-Refresher.ts",
+	"src/AmiAmi-SearchFilter.ts",
+	"src/BuyfriendRedirect.ts",
 	"src/MFC-MarkAllRead.ts"
-  ]
+  ],
+  "typeAcquisition": {
+	"enable": true
+  }
 }

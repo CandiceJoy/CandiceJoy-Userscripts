@@ -1,103 +1,56 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Config_1 = require("Config");
 (function () {
     "use strict";
     const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
     const boxConditions = ["A", "B", "C", "N"];
-    let configDoc;
-    GM_config.init({
-        "id": "amiami-search-filter",
-        "title": "AmiAmi Search Filter Config", "fields": // Fields object
-        {
-            "currency": // This is the id of the field
-            {
-                "label": "Currency (3 letters): ",
-                "type": "text",
-                "size": "3", "default": "usd" // Default value if user doesn't change it
-            }, "allowedItemConditions": // This is the id of the field
-            {
-                "label": "Lowest Allowed Item Condition: ",
-                "type": "select",
-                "options": itemConditions,
-                "default": "B" // Default value if user doesn't change it
-            }, "allowedBoxConditions": // This is the id of the field
-            {
-                "label": "Lowest Allowed Box Condition: ",
-                "type": "select",
-                "options": boxConditions,
-                "default": "B" // Default value if user doesn't change it
-            }, "priceThreshold": // This is the id of the field
-            {
-                "label": "Hide items above this price (JPY): ",
-                "type": "int",
-                "default": "10000" // Default value if user doesn't change it
-            }, "highlightPrice": // This is the id of the field
-            {
-                "label": "Highlight items below or equal to this price (JPY): ",
-                "type": "int",
-                "default": "5000" // Default value if user doesn't change it
-            }, "exclude": // This is the id of the field
-            {
-                "label": "List of search terms to hide (one per line): ",
-                "type": "textarea",
-                "default": "" // Default value if user doesn't change it
-            }, "dontExclude": // This is the id of the field
-            {
-                "label": "List of search terms to exclude from price and condition filters (one per line): ",
-                "type": "textarea",
-                "default": "" // Default value if user doesn't change it
+    const config = new Config_1.Config("amiami-search-filter", "AmiAmi Search Filter Config");
+    config.add("currency", "Currency (3 letters): ", "text", "usd");
+    config.add("allowedItemConditions", "Lowest Allowed Item Condition: ", "select", "B", { "options": itemConditions });
+    config.add("allowedBoxConditions", "Lowest Allowed Box Condition: ", "select", "B", { "options": boxConditions });
+    config.add("priceThreshold", "Hide items above this price (JPY): ", "int", "10000");
+    config.add("highlightPrice", "Highlight items below or equal to this price (JPY): ", "int", "5000");
+    config.add("exclude", "List of search terms to hide (one per line): ", "textarea", "");
+    config.add("dontExclude", "List of search terms to exclude from price and condition filters (one per line): ", "textarea", "");
+    config.addEvent("save", () => {
+        const configDoc = config.document;
+        $(configDoc).find("textarea").each(function () {
+            const scroll = $(this)[0];
+            if (scroll) {
+                $(this)
+                    .height(scroll.scrollHeight + 20);
             }
-        },
-        "events": {
-            "open": function (doc) {
-                configDoc = doc;
-                $(configDoc).find("#amiami-search-filter_field_currency").attr("maxlength", "3");
-                $(configDoc).find("#amiami-search-filter_field_exclude").attr("cols", "20");
-                $(configDoc).find("#amiami-search-filter_field_dontExclude").attr("cols", "20");
-                $(configDoc).find("textarea").each(function () {
-                    const scroll = $(this)[0];
-                    if (scroll) {
-                        $(this)
-                            .height(scroll.scrollHeight + 20);
-                    }
-                });
-            }, "save": function () {
-                $(configDoc).find("textarea").each(function () {
-                    const scroll = $(this)[0];
-                    if (scroll) {
-                        $(this)
-                            .height(scroll.scrollHeight + 20);
-                    }
-                });
-                const currencyValue = $(configDoc)
-                    .find("#amiami-search-filter_field_currency")
-                    .val();
-                if (currencyValue && currencyValue.toString().length !== 3) {
-                    alert("Currency must be 3 letters");
-                }
-                const priceThresholdValue = $(configDoc)
-                    .find("#amiami-search-filter_field_priceThreshold")
-                    .val();
-                if (priceThresholdValue && parseInt(priceThresholdValue.toString()
-                    .toString()) >= 50000) {
-                    alert("Price threshold too high");
-                }
-                const highlightPriceValue = $(configDoc)
-                    .find("#amiami-search-filter_field_highlightPrice")
-                    .val();
-                if (highlightPriceValue && parseInt(highlightPriceValue.toString()
-                    .toString()) <= 500) {
-                    alert("Highlight price too low");
-                }
-            }
+        });
+        const currencyValue = $(configDoc)
+            .find("#amiami-search-filter_field_currency")
+            .val();
+        if (currencyValue && currencyValue.toString().length !== 3) {
+            alert("Currency must be 3 letters");
+        }
+        const priceThresholdValue = $(configDoc)
+            .find("#amiami-search-filter_field_priceThreshold")
+            .val();
+        if (priceThresholdValue && parseInt(priceThresholdValue.toString()
+            .toString()) >= 50000) {
+            alert("Price threshold too high");
+        }
+        const highlightPriceValue = $(configDoc)
+            .find("#amiami-search-filter_field_highlightPrice")
+            .val();
+        if (highlightPriceValue && parseInt(highlightPriceValue.toString()
+            .toString()) <= 500) {
+            alert("Highlight price too low");
         }
     });
-    const allowedItemConditions = GM_config.get("allowedItemConditions").toString(); //letters only
-    const allowedBoxConditions = GM_config.get("allowedBoxConditions").toString(); //letters only
-    const currency = GM_config.get("currency").toString().toLowerCase(); //lowercase, 3 letter
-    const priceThreshold = parseInt(GM_config.get("priceThreshold").toString()); //exclude prices > this (yen)
-    const highlightPrice = parseInt(GM_config.get("highlightPrice").toString()); //highlight prices <= this (yen)
-    const alwaysExclude = (GM_config.get("exclude")) ? GM_config.get("exclude").toString().split("\n") : [];
-    const dontExclude = (GM_config.get("dontExclude")) ? GM_config.get("dontExclude").toString().split("\n") : [];
+    config.init();
+    const allowedItemConditions = config.get("allowedItemConditions").toString(); //letters only
+    const allowedBoxConditions = config.get("allowedBoxConditions").toString(); //letters only
+    const currency = config.get("currency").toString().toLowerCase(); //lowercase, 3 letter
+    const priceThreshold = parseInt(config.get("priceThreshold").toString()); //exclude prices > this (yen)
+    const highlightPrice = parseInt(config.get("highlightPrice").toString()); //highlight prices <= this (yen)
+    const alwaysExclude = (config.get("exclude")) ? config.get("exclude").toString().split("\n") : [];
+    const dontExclude = (config.get("dontExclude")) ? config.get("dontExclude").toString().split("\n") : [];
     const itemSelector = ".newly-added-items__item";
     const pagerSelector = ".pager_mb,.pager-list";
     const pagerNumSelector = "li.pager-list__item_num";
@@ -118,14 +71,29 @@
                 update(mutation.addedNodes);
                 $(".header-head__menu")
                     .prepend("<button style='font-size: 15px;'>Filter Config</button>")
-                    .on("click", function () {
-                    GM_config.open();
+                    .on("click", async function () {
+                    await config.show();
+                    const configDoc = config.document;
+                    $(configDoc).find("#amiami-search-filter_field_currency").attr("maxlength", "3");
+                    $(configDoc).find("#amiami-search-filter_field_exclude").attr("cols", "20");
+                    $(configDoc).find("#amiami-search-filter_field_dontExclude").attr("cols", "20");
+                    $(configDoc).find("textarea").each(function () {
+                        const scroll = $(this)[0];
+                        if (scroll) {
+                            $(this)
+                                .height(scroll.scrollHeight + 20);
+                        }
+                    });
                 });
             }
         });
     }
     const observer = new MutationObserver(observerFunc);
     const basePath = `${window.location.protocol}//${window.location.host}`;
+    const body = document.querySelector("body");
+    if (body) {
+        observer.observe(body, observerConfig);
+    }
     class AmiAmiItem {
         //private resale: number| undefined;
         //private scode: string| undefined;
@@ -152,7 +120,6 @@
                 .always(this.setup.bind(this));
         }
         setup(data, _textStatus, xhr) {
-            debugger;
             const root = data;
             const item = root.item;
             //Object.assign(this,root.item);
@@ -307,12 +274,6 @@
             $(this.element).show();
         }
     }
-    (function () {
-        const body = document.querySelector("body");
-        if (body) {
-            observer.observe(body, observerConfig);
-        }
-    })();
     function processButtons() {
         const url = new URL(location.href);
         const urlParams = url.searchParams;
@@ -392,5 +353,3 @@
         });
     }
 })();
-
-//# sourceMappingURL=maps/AmiAmi-SearchFilter.user.js.map

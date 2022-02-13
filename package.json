@@ -5,7 +5,6 @@
   "main": "AmiAmi-Refresher.user.js",
   "dependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "@types/gulp-sourcemaps": "^0.0.35",
     "axios": "^0.19.2",
     "bluebird": "^3.7.2",
     "debug": "^3.1.0",
@@ -20,6 +19,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "jquery": "^3.6.0",
     "ms": "^2.0.0",
+    "typac": "^0.1.11",
     "typescript-eslint": "^0.0.1-alpha.0",
     "u": "^0.1.0"
   },
@@ -52,7 +52,6 @@
     "gulp-livereload": "^4.0.2",
     "gulp-preprocess": "^4.0.2",
     "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^3.0.0",
     "gulp-typescript": "^6.0.0-alpha.1",
     "i": "^0.3.7",
     "jquery": "^3.6.0",

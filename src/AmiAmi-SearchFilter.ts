@@ -10,6 +10,7 @@
 // @grant              GM_setValue
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
+// @require https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/libs/Config.js
 // @if BUILD_TYPE="Dev"
 // @require /* @echo PATH*/AmiAmi-SearchFilter.user.js
 // @endif
@@ -20,133 +21,76 @@
 // @run-at document-idle
 // ==/UserScript==
 // @if BUILD_TYPE="Prod"
-// !!!!!!!include ../libraries/config.js
-/// <reference types="../types/GM_config"/>
 import SuccessTextStatus = JQuery.Ajax.SuccessTextStatus;
 import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
+import {Config} from "Config";
 
 (function(): void
 {
 	"use strict";
 	const itemConditions: string[] = ["A", "A-", "B+", "B", "C", "J"];
 	const boxConditions: string[] = ["A", "B", "C", "N"];
-	let configDoc: Document;
+	const config: Config = new Config("amiami-search-filter", "AmiAmi Search Filter Config");
+	config.add("currency", "Currency (3 letters): ", "text", "usd");
+	config.add("allowedItemConditions", "Lowest Allowed Item Condition: ", "select", "B", {"options": itemConditions});
+	config.add("allowedBoxConditions", "Lowest Allowed Box Condition: ", "select", "B", {"options": boxConditions});
+	config.add("priceThreshold", "Hide items above this price (JPY): ", "int", "10000");
+	config.add("highlightPrice", "Highlight items below or equal to this price (JPY): ", "int", "5000");
+	config.add("exclude", "List of search terms to hide (one per line): ", "textarea", "");
+	config.add("dontExclude", "List of search terms to exclude from price and condition filters (one per line): ", "textarea", "");
+	config.addEvent("save", (): void =>
+	{
+		const configDoc: Document = config.document;
+		$(configDoc).find("textarea").each(function(): void
+		                                   {
+			                                   const scroll: HTMLTextAreaElement | undefined = $(this)[0];
+			                                   if(scroll)
+			                                   {
+				                                   $(this)
+					                                   .height(scroll.scrollHeight + 20);
+			                                   }
+		                                   });
 
-	GM_config.init({
-		               "id"   : "amiami-search-filter", // The id used for this instance of GM_config
-		               "title": "AmiAmi Search Filter Config", "fields": // Fields object
-			{
-				"currency"                    : // This is the id of the field
-					{
-						"label": "Currency (3 letters): ", // Appears next to field
-						"type" : "text", // Makes this setting a text field
-						"size" : "3", "default": "usd" // Default value if user doesn't change it
-					}, "allowedItemConditions": // This is the id of the field
-					{
-						"label"  : "Lowest Allowed Item Condition: ", // Appears next to field
-						"type"   : "select", // Makes this setting a text field
-						"options": itemConditions, // Possible choices
-						"default": "B" // Default value if user doesn't change it
-					}, "allowedBoxConditions" : // This is the id of the field
-					{
-						"label"  : "Lowest Allowed Box Condition: ", // Appears next to field
-						"type"   : "select", // Makes this setting a text field
-						"options": boxConditions, // Possible choices
-						"default": "B" // Default value if user doesn't change it
-					}, "priceThreshold"       : // This is the id of the field
-					{
-						"label"  : "Hide items above this price (JPY): ", // Appears next to field
-						"type"   : "int", // Makes this setting a text field
-						"default": "10000" // Default value if user doesn't change it
-					}, "highlightPrice"       : // This is the id of the field
-					{
-						"label"  : "Highlight items below or equal to this price (JPY): ", // Appears next to field
-						"type"   : "int", // Makes this setting a text field
-						"default": "5000" // Default value if user doesn't change it
-					}, "exclude"              : // This is the id of the field
-					{
-						"label"  : "List of search terms to hide (one per line): ", // Appears next to field
-						"type"   : "textarea", // Makes this setting a text field
-						"default": "" // Default value if user doesn't change it
-					}, "dontExclude"          : // This is the id of the field
-					{
-						"label"  : "List of search terms to exclude from price and condition filters (one per line): ", // Appears next to field
-						"type"   : "textarea", // Makes this setting a text field
-						"default": "" // Default value if user doesn't change it
-					}
-			},
+		const currencyValue: string | number | string[] | undefined = $(configDoc)
+			.find("#amiami-search-filter_field_currency")
+			.val();
 
-		               "events": {
-			               "open"   : function(doc: Document): void
-			               {
-				               configDoc = doc;
+		if(currencyValue && currencyValue.toString().length !== 3)
+		{
+			alert("Currency must be 3 letters");
+		}
 
-				               $(configDoc).find("#amiami-search-filter_field_currency").attr("maxlength", "3");
-				               $(configDoc).find("#amiami-search-filter_field_exclude").attr("cols", "20");
-				               $(configDoc).find("#amiami-search-filter_field_dontExclude").attr("cols", "20");
-				               $(configDoc).find("textarea").each(function(): void
-				                                                  {
-					                                                  const scroll: HTMLTextAreaElement | undefined = $(this)[0];
-					                                                  if(scroll)
-					                                                  {
-						                                                  $(this)
-							                                                  .height(scroll.scrollHeight + 20);
-					                                                  }
-				                                                  });
-			               }, "save": function(): void
-			               {
+		const priceThresholdValue: string | number | string[] | undefined = $(configDoc)
+			.find("#amiami-search-filter_field_priceThreshold")
+			.val();
 
-				               $(configDoc).find("textarea").each(function(): void
-				                                                  {
-					                                                  const scroll: HTMLTextAreaElement | undefined = $(this)[0];
-					                                                  if(scroll)
-					                                                  {
-						                                                  $(this)
-							                                                  .height(scroll.scrollHeight + 20);
-					                                                  }
-				                                                  });
-							   
-				               const currencyValue: string | number | string[] | undefined = $(configDoc)
-					               .find("#amiami-search-filter_field_currency")
-					               .val();
+		if(priceThresholdValue && parseInt(priceThresholdValue.toString()
+		                                                      .toString()) >= 50000)
+		{
+			alert("Price threshold too high");
+		}
 
-				               if(currencyValue && currencyValue.toString().length !== 3)
-				               {
-					               alert("Currency must be 3 letters");
-				               }
+		const highlightPriceValue: string | number | string[] | undefined = $(configDoc)
+			.find("#amiami-search-filter_field_highlightPrice")
+			.val();
 
-				               const priceThresholdValue: string | number | string[] | undefined = $(configDoc)
-					               .find("#amiami-search-filter_field_priceThreshold")
-					               .val();
+		if(highlightPriceValue && parseInt(highlightPriceValue.toString()
+		                                                      .toString()) <= 500)
+		{
+			alert("Highlight price too low");
+		}
+	});
+	config.init();
 
-				               if(priceThresholdValue && parseInt(priceThresholdValue.toString()
-				                                                                     .toString()) >= 50000)
-				               {
-					               alert("Price threshold too high");
-				               }
+	const allowedItemConditions: string = config.get("allowedItemConditions").toString(); //letters only
+	const allowedBoxConditions: string = config.get("allowedBoxConditions").toString(); //letters only
+	const currency: string = config.get("currency").toString().toLowerCase(); //lowercase, 3 letter
+	const priceThreshold: number = parseInt(config.get("priceThreshold").toString()); //exclude prices > this (yen)
+	const highlightPrice: number = parseInt(config.get("highlightPrice").toString()); //highlight prices <= this (yen)
 
-				               const highlightPriceValue: string | number | string[] | undefined = $(configDoc)
-					               .find("#amiami-search-filter_field_highlightPrice")
-					               .val();
+	const alwaysExclude: string[] = (config.get("exclude")) ? config.get("exclude").toString().split("\n") : [];
 
-				               if(highlightPriceValue && parseInt(highlightPriceValue.toString()
-				                                                                     .toString()) <= 500)
-				               {
-					               alert("Highlight price too low");
-				               }
-			               }
-		               }
-	               });
-
-	const allowedItemConditions: string = GM_config.get("allowedItemConditions").toString(); //letters only
-	const allowedBoxConditions: string = GM_config.get("allowedBoxConditions").toString(); //letters only
-	const currency: string = GM_config.get("currency").toString().toLowerCase(); //lowercase, 3 letter
-	const priceThreshold: number = parseInt(GM_config.get("priceThreshold").toString()); //exclude prices > this (yen)
-	const highlightPrice: number = parseInt(GM_config.get("highlightPrice").toString()); //highlight prices <= this (yen)
-
-	const alwaysExclude: string[] = (GM_config.get("exclude")) ? GM_config.get("exclude").toString().split("\n") : [];
-
-	const dontExclude: string[] = (GM_config.get("dontExclude")) ? GM_config.get("dontExclude").toString().split("\n") : [];
+	const dontExclude: string[] = (config.get("dontExclude")) ? config.get("dontExclude").toString().split("\n") : [];
 
 	const itemSelector: string = ".newly-added-items__item";
 	const pagerSelector: string = ".pager_mb,.pager-list";
@@ -174,9 +118,23 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 				                  update(mutation.addedNodes);
 				                  $(".header-head__menu")
 					                  .prepend("<button style='font-size: 15px;'>Filter Config</button>")
-					                  .on("click", function(): void
+					                  .on("click", async function(): Promise<void>
 					                  {
-						                  GM_config.open();
+						                  await config.show();
+						                  const configDoc: Document = config.document;
+
+						                  $(configDoc).find("#amiami-search-filter_field_currency").attr("maxlength", "3");
+						                  $(configDoc).find("#amiami-search-filter_field_exclude").attr("cols", "20");
+						                  $(configDoc).find("#amiami-search-filter_field_dontExclude").attr("cols", "20");
+						                  $(configDoc).find("textarea").each(function(): void
+						                                                     {
+							                                                     const scroll: HTMLTextAreaElement | undefined = $(this)[0];
+							                                                     if(scroll)
+							                                                     {
+								                                                     $(this)
+									                                                     .height(scroll.scrollHeight + 20);
+							                                                     }
+						                                                     });
 					                  });
 			                  }
 		                  });
@@ -185,22 +143,29 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 	const observer: MutationObserver = new MutationObserver(observerFunc);
 	const basePath: string = `${window.location.protocol}//${window.location.host}`;
 
+	const body: HTMLBodyElement | null = document.querySelector("body");
+
+	if(body)
+	{
+		observer.observe(body, observerConfig);
+	}
+
 	class AmiAmiItem
 	{
 		//private url: string;
-		private mfc: string="";
-		private itemCondition: string="";
-		private boxCondition: string="";
+		private mfc: string = "";
+		private itemCondition: string = "";
+		private boxCondition: string = "";
 		private readonly element: HTMLElement;
 		private readonly gcode: string;
 		//private item: Item | undefined;
-		private name: string="";
-		private jancode: string="";
-		private instock: boolean=true;
-		private price: number=0;
-		private buy: boolean=true;
+		private name: string = "";
+		private jancode: string = "";
+		private instock: boolean = true;
+		private price: number = 0;
+		private buy: boolean = true;
 		//private preowned: boolean| undefined;
-		private closed: boolean=false;
+		private closed: boolean = false;
 		//private resale: number| undefined;
 		//private scode: string| undefined;
 		//private sname: string| undefined;
@@ -218,7 +183,7 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 			 .always(this.setup.bind(this));
 		}
 
-		setup(data: object, _textStatus: SuccessTextStatus|ErrorTextStatus, xhr: string|JQueryXHR): void
+		setup(data: object, _textStatus: SuccessTextStatus | ErrorTextStatus, xhr: string | JQueryXHR): void
 		{
 			const root: Readonly<RootObject> = data as RootObject;
 			const item: Readonly<Item> = root.item;
@@ -245,26 +210,26 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 			//this.scode = item.scode;
 			this.mfc = `https://myfigurecollection.net/browse.v4.php?keywords=${this.jancode}`;
 			//this.sname = item.sname;
-			
-			const itemConditionParseResults: RegExpExecArray|null = itemConditionRegex.exec(item.sname);
-			
+
+			const itemConditionParseResults: RegExpExecArray | null = itemConditionRegex.exec(item.sname);
+
 			if(itemConditionParseResults)
 			{
-				const condition: string|undefined = itemConditionParseResults[1];
-				
-				if( condition )
+				const condition: string | undefined = itemConditionParseResults[1];
+
+				if(condition)
 				{
 					this.itemCondition = condition;
 				}
 			}
 
-			const boxConditionParseResults: RegExpExecArray|null = boxConditionRegex.exec(item.sname);
+			const boxConditionParseResults: RegExpExecArray | null = boxConditionRegex.exec(item.sname);
 
 			if(boxConditionParseResults)
 			{
-				const condition: string|undefined = boxConditionParseResults[1];
+				const condition: string | undefined = boxConditionParseResults[1];
 
-				if( condition )
+				if(condition)
 				{
 					this.boxCondition = condition;
 				}
@@ -276,19 +241,19 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 			$.ajax(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json`)
 			 .always((data: any): void =>
 			         {
-				         const conversionFactor: string|undefined = $(data).attr(currency);
-						 let newPrice:number=-1;
-						 
-						 if( conversionFactor )
-						 {
-							 newPrice= parseFloat(conversionFactor) * this.price;
-						 }
-				         
+				         const conversionFactor: string | undefined = $(data).attr(currency);
+				         let newPrice: number = -1;
+
+				         if(conversionFactor)
+				         {
+					         newPrice = parseFloat(conversionFactor) * this.price;
+				         }
+
 				         const formatter: Intl.NumberFormat = new Intl.NumberFormat("en-US", {
 					         style: "currency", currency: currency.toUpperCase()
 				         });
 
-				         const convertedPrice:string = formatter.format(newPrice);
+				         const convertedPrice: string = formatter.format(newPrice);
 
 				         if(convertedPrice !== undefined)
 				         {
@@ -312,8 +277,8 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 
 			for(let i = 0; i < aTags.length; i++)
 			{
-				const tag: HTMLSpanElement|undefined = aTags[i];
-				
+				const tag: HTMLSpanElement | undefined = aTags[i];
+
 				if(tag && tag.textContent === searchText)
 				{
 					$(tag).hide();
@@ -329,12 +294,12 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 			//Process Always Exclude List
 			for(const y in alwaysExclude)
 			{
-				const currentExclude:string|undefined=alwaysExclude[y];
+				const currentExclude: string | undefined = alwaysExclude[y];
 				let exclude2: string = "";
 
-				if( currentExclude )
+				if(currentExclude)
 				{
-					exclude2 = currentExclude.toLowerCase()
+					exclude2 = currentExclude.toLowerCase();
 				}
 
 				if(this.name.toLowerCase().indexOf(exclude2) > -1)
@@ -368,12 +333,12 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 			//Process Don't Exclude List
 			for(const x in dontExclude)
 			{
-				const currentExclude:string|undefined=dontExclude[x];
+				const currentExclude: string | undefined = dontExclude[x];
 				let exclude1: string = "";
 
-				if( currentExclude )
+				if(currentExclude)
 				{
-					exclude1=currentExclude.toLowerCase();
+					exclude1 = currentExclude.toLowerCase();
 				}
 
 				if(this.name.toLowerCase().indexOf(exclude1) > -1)
@@ -445,23 +410,13 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 		}
 	}
 
-	(function(): void
-	{
-		const body: HTMLBodyElement|null =document.querySelector("body");
-
-		if( body )
-		{
-			observer.observe(body, observerConfig);
-		}
-	})();
-
 	function processButtons(): void
 	{
 		const url: URL = new URL(location.href);
 		const urlParams: URLSearchParams = url.searchParams;
-		const pageParam:string|null=urlParams.get("pagecnt");
+		const pageParam: string | null = urlParams.get("pagecnt");
 
-		if( !pageParam )
+		if(!pageParam)
 		{
 			return;
 		}
@@ -550,15 +505,15 @@ import ErrorTextStatus = JQuery.Ajax.ErrorTextStatus;
 		$(node).find(itemSelector).each(function(): void
 		                                {
 			                                const href: JQuery = $(this).find(gcodeSelector);
-			                                const link: string|undefined = href.attr("href");
+			                                const link: string | undefined = href.attr("href");
 			                                const urlParams: URLSearchParams = new URL(basePath + link).searchParams;
-			                                const gcode: string|null = urlParams.get(gcodeID);
+			                                const gcode: string | null = urlParams.get(gcodeID);
 
-											if( gcode && link )
-											{
-												const item: AmiAmiItem = new AmiAmiItem(gcode, this);
-												item.init();
-											}
+			                                if(gcode && link)
+			                                {
+				                                const item: AmiAmiItem = new AmiAmiItem(gcode, this);
+				                                item.init();
+			                                }
 		                                });
 	}
 

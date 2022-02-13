@@ -1,0 +1,23 @@
+{
+  "extends"        : "../../tsconfig.json",
+  "compilerOptions": {
+	"outDir"                          : "./",
+
+	"declaration"                     : true,
+	"emitDeclarationOnly"             : false,
+	"typeRoots"                       : [
+	  "../../node_modules/@types",
+	  "../types"
+	],
+	"baseUrl"                         : "./",
+	"paths"                           : {
+	  "*": [
+		"../../node_modules/*"
+	  ]
+	}
+  },
+  "files"          : [
+	"Config.ts",
+	"Watcher.ts"
+  ]
+}

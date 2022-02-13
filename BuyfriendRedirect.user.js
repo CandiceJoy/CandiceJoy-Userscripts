@@ -28,5 +28,3 @@
         }
     });
 })();
-
-//# sourceMappingURL=maps/BuyfriendRedirect.user.js.map

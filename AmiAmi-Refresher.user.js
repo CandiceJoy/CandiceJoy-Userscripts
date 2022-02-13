@@ -110,5 +110,3 @@
         }
     })();
 })();
-
-//# sourceMappingURL=maps/AmiAmi-Refresher.user.js.map

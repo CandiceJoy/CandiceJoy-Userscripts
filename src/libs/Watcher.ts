@@ -1,6 +1,12 @@
-let Watcher = class
+export class Watcher
 {
-	constructor(callback, node = document.querySelector("body"))
+	private readonly options: object;
+	private observer: MutationObserver;
+	private callback: (arg0: Node) => void;
+	private node: Node;
+	private filter: () => boolean;
+
+	constructor(callback: (arg0: Node) => void, node: HTMLBodyElement | null = document.querySelector("body"))
 	{
 		this.setCallback(callback);
 		this.createObserver();
@@ -12,40 +18,44 @@ let Watcher = class
 		this.setNode(node);
 	}
 
-	createObserver()
+	createObserver(): void
 	{
 		this.observer = new MutationObserver(this.observed.bind(this));
 	}
 
-	setCallback(callback)
+	setCallback(callback: (arg0: Node) => void): void
 	{
 		this.callback = callback;
 	}
 
-	setNode(node)
+	setNode(node: Node | null): void
 	{
-		this.node = node;
+		if(node)
+		{
+			this.node = node;
+		}
+
 	}
 
-	setOption(option, value)
+	setOption(option: string, value: string): void
 	{
-		this.options[option] = value;
+		Object.defineProperty(this.options, option, value);
 	}
 
 	//Callback takes in array of nodes, returns correct array of nodes
-	setFilter(filter)
+	setFilter(filter: () => boolean): void
 	{
 		this.filter = filter;
 	}
 
-	observed(mutations)
+	observed(mutations: MutationRecord[]): void
 	{
 		//console.log(this);
-		let nodes = [];
+		let nodes: Node[] = [];
 
-		mutations.forEach((mutation) =>
+		mutations.forEach((mutation: MutationRecord): void =>
 		                  {
-			                  mutation.addedNodes.forEach((node) =>
+			                  mutation.addedNodes.forEach((node: Node): void =>
 			                                              {
 				                                              nodes.push(node);
 			                                              });
@@ -59,23 +69,23 @@ let Watcher = class
 
 		if(nodes.length > 0)
 		{
-			nodes.forEach((node) =>
+			nodes.forEach((node: any): void =>
 			              {
 				              this.callback(node);
 			              });
 		}
 	}
 
-	on()
+	on(): void
 	{
 		this.observer.observe(this.node, this.options);
 	}
 
-	off()
+	off(): void
 	{
 		this.observer.disconnect();
 	}
-};
+}
 
 /*
  let watcher = new Watcher((node) =>

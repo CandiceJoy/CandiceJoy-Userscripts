@@ -31,5 +31,3 @@
         });
     }
 })();
-
-//# sourceMappingURL=maps/MFC-MarkAllRead.user.js.map
