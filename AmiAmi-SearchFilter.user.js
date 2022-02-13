@@ -1,11 +1,27 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Config_1 = require("Config");
+// ==UserScript==
+// @name         AmiAmi Search Filter
+// @namespace    http://candicejoy.com/
+// @version      1.2
+// @description  Search assistant for AmiAmi
+// @author       CandiceJoy
+// @match        https://www.amiami.com/eng/search/list/*
+// @icon         https://www.google.com/s2/favicons?domain=amiami.com
+// @grant              GM_getValue
+// @grant              GM_setValue
+// @require      http://code.jquery.com/jquery-3.4.1.min.js
+// @require https://openuserjs.org/src/libs/sizzle/GM_config.js
+// @require https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/src/libs/Config.js
+// @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
+// @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
+// @run-at document-idle
+// ==/UserScript==
+/// <reference types="./libs/Config" />
 (function () {
     "use strict";
     const itemConditions = ["A", "A-", "B+", "B", "C", "J"];
     const boxConditions = ["A", "B", "C", "N"];
-    const config = new Config_1.Config("amiami-search-filter", "AmiAmi Search Filter Config");
+    const config = new Config("amiami-search-filter", "AmiAmi Search Filter Config");
     config.add("currency", "Currency (3 letters): ", "text", "usd");
     config.add("allowedItemConditions", "Lowest Allowed Item Condition: ", "select", "B", { "options": itemConditions });
     config.add("allowedBoxConditions", "Lowest Allowed Box Condition: ", "select", "B", { "options": boxConditions });

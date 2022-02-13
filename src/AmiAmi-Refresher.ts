@@ -8,10 +8,16 @@
 // @icon         https://www.google.com/s2/favicons?domain=amiami.com
 // @grant        none
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
+// @if BUILD_TYPE="Dev"
+// @require file:///* @echo PATH*/AmiAmi-Refresher.user.js
+// @endif
+// @if BUILD_TYPE="Prod"
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
+// @endif
 // @run-at document-idle
 // ==/UserScript==
+// @if BUILD_TYPE="Prod"
 ( function (): void
 {
 	"use strict";
@@ -156,3 +162,4 @@
 		}
 	} )();
 } )();
+// @endif

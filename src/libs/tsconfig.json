@@ -2,7 +2,7 @@
   "extends"        : "../../tsconfig.json",
   "compilerOptions": {
 	"outDir"                          : "./",
-
+	"module"                          : "umd",
 	"declaration"                     : true,
 	"emitDeclarationOnly"             : false,
 	"typeRoots"                       : [
@@ -14,7 +14,7 @@
 	  "*": [
 		"../../node_modules/*"
 	  ]
-	}
+	},
   },
   "files"          : [
 	"Config.ts",

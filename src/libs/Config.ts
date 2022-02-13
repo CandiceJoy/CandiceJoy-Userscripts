@@ -21,7 +21,7 @@ function checkProperty(type: string, key: string): void
 	}
 }
 
-export class Config
+class Config
 {
 	public document: Document;
 	public window: Window;
@@ -39,18 +39,18 @@ export class Config
 		this.events = [];
 	}
 
-	public add(name: string, label: string, typeIn: string, defaultValue: string, properties: object|null = null): void
+	public add(name: string, label: string, typeIn: string, defaultValue: string, properties: object | null = null): void
 	{
 		this.addField(name, label, typeIn, defaultValue, properties);
 	}
 
-	private addField(name: string | ConfigField, label: string, typeIn: string, defaultValue: string, properties: object|null = null): void
+	private addField(name: string | ConfigField, label: string, typeIn: string, defaultValue: string, properties: object | null = null): void
 	{
 		if(name instanceof ConfigField)
 		{
 			this.fields.push(name);
 		}
-		else if( properties )
+		else if(properties)
 		{
 			const field: ConfigField = new ConfigField(name, label, typeIn, defaultValue, properties);
 			this.fields.push(field);
@@ -69,8 +69,7 @@ export class Config
 			throw "No fields exist";
 		}
 
-		//console.log(this.fields);
-		const field: ConfigField|undefined = this.fields.find(({name}): boolean => name === fieldIn);
+		const field: ConfigField | undefined = this.fields.find(({name}): boolean => name === fieldIn);
 
 		if(!field)
 		{
@@ -80,7 +79,7 @@ export class Config
 		field.setProperty(key, value);
 	}
 
-	public event(name: string, callback: ()=>void): void
+	public event(name: string, callback: () => void): void
 	{
 		this.addEvent(name, callback);
 	}
@@ -97,50 +96,49 @@ export class Config
 			throw "Callback required";
 		}
 
-			const event: ConfigEvent = new ConfigEvent(name, callback);
-			this.events.push(event);
+		const event: ConfigEvent = new ConfigEvent(name, callback);
+		this.events.push(event);
 	}
 
 	private generateFields(): object
 	{
-		const fieldsObject: object = {};
+		const fieldsObject: {[key:string]:{[key:string]:string|string[]}}={};
 
 		for(const i in this.fields)
 		{
 			const field: ConfigField = this.fields[i]!;
-			const fieldObject: object = {
+			const fieldObject: {[key:string]:string|string[]} = {
 				"label": field.label, "type": field.type, "default": field.defaultValue
 			};
 
-			const props: [string, string[]][] = field.getProperties();
+			const props: [string, string|string[]][] = field.getProperties();
 
 			for(const i in props)
 			{
-				const propTuple: [string, string[]] = props[i]!;
+				const propTuple: [string, string|string[]] = props[i]!;
 				const key: string = propTuple[0];
-				Object.defineProperty(fieldObject,key,propTuple[1]);
+				fieldObject[key]=propTuple[1];
 			}
-
-			Object.defineProperty(fieldsObject,field.name,fieldObject);
+			fieldsObject[field.name]= fieldObject;
 		}
 
 		return fieldsObject;
 	}
 
-	private generateEvents(): object|null
+	private generateEvents(): object | null
 	{
 		if(this.events.length <= 0)
 		{
 			return null;
 		}
 
-		const eventsObject: object = {};
+		const eventsObject: { [key:string]:()=>void} = {};
 
 		for(const i in this.events)
 		{
 			const event: ConfigEvent = this.events[i]!;
 
-			Object.defineProperty(eventsObject,event.event,event.callback);
+			eventsObject[event.event]= event.callback;
 		}
 
 		return eventsObject;
@@ -159,11 +157,11 @@ export class Config
 			"id": this.id, "title": this.title, "fields": fields
 		};
 
-		const events: object|null = this.generateEvents();
+		const events: object | null = this.generateEvents();
 
 		if(events)
 		{
-			Object.defineProperty(configObject,"events",events);
+			Object.defineProperty(configObject, "events", events);
 		}
 
 		GM_config.init(configObject as InitOptionsNoCustom);
@@ -174,7 +172,7 @@ export class Config
 		GM_config.open();
 		const element: HTMLElement | undefined = GM_config.frame;
 
-		if( element && element instanceof HTMLIFrameElement)
+		if(element && element instanceof HTMLIFrameElement)
 		{
 			this.frame = element as HTMLIFrameElement;
 		}
@@ -183,19 +181,18 @@ export class Config
 		                         {
 			                         this.frame.onload = ((): void =>
 			                         {
-				                         console.log("FRAME: " + this.frame);
-										 const doc:Document|null = this.frame.contentDocument;
-										 const win:Window|null = this.frame.contentWindow;
+				                         const doc: Document | null = this.frame.contentDocument;
+				                         const win: Window | null = this.frame.contentWindow;
 
-										 if( doc )
-										 {
-											 this.document = doc;
-										 }
+				                         if(doc)
+				                         {
+					                         this.document = doc;
+				                         }
 
-										 if( win )
-										 {
-											 this.window = win;
-										 }
+				                         if(win)
+				                         {
+					                         this.window = win;
+				                         }
 			                         }).bind(this);
 			                         resolve();
 		                         });
@@ -213,7 +210,7 @@ class ConfigEvent
 	public readonly event: string;
 	public readonly callback: () => void;
 
-	constructor(event: string, callback: ()=>void)
+	constructor(event: string, callback: () => void)
 	{
 		if(!this.allowedEvents.includes(event))
 		{
@@ -230,8 +227,8 @@ class ConfigEvent
 	}
 }
 
-type Properties={
-	[key:string]:string[];
+type Properties = {
+	[key: string]: string|string[];
 };
 
 class ConfigField
@@ -243,7 +240,7 @@ class ConfigField
 	public readonly defaultValue: string;
 	private properties: Properties;
 
-	constructor(name: string, label: string, type: string, defaultValue: string, properties: object|null = null)
+	constructor(name: string, label: string, type: string, defaultValue: string, properties: object | null = null)
 	{
 		this.name = name;
 		this.label = label;
@@ -273,7 +270,7 @@ class ConfigField
 		if(properties)
 		{
 			this.properties = {};
-			const props:Properties = properties as Properties;
+			const props: Properties = properties as Properties;
 
 			for(const propertyName in props)
 			{
@@ -290,23 +287,22 @@ class ConfigField
 			this.properties = {};
 		}
 		checkProperty(this.type, key);
-		Object.defineProperty(this.properties,key,value);
+		this.properties[key]= value;
 	}
 
-	public getProperties(): [string, string[]][]
+	public getProperties(): [string, string|string[]][]
 	{
-		const props: [string, string[]][] = [];
+		const props: [string, string|string[]][] = [];
 
 		for(const key in this.properties)
 		{
-			const value: string|string[] = this.properties[key]!;
+			const value: string | string[] = this.properties[key]!;
 			props.push([key, value]);
 		}
 
 		return props;
 	}
 }
-
 /* Example
 
  const itemConditions = ["A", "A-", "B+", "B", "C", "J"];

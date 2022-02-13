@@ -1,4 +1,4 @@
-export class Watcher
+class Watcher
 {
 	private readonly options: object;
 	private observer: MutationObserver;
@@ -86,7 +86,6 @@ export class Watcher
 		this.observer.disconnect();
 	}
 }
-
 /*
  let watcher = new Watcher((node) =>
  {
