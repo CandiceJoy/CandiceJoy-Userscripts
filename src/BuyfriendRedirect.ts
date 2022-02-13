@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BuyFriend Redirect
 // @namespace    http://candicejoy.com/
-// @version      1.1
+// @version      1.2
 // @description  Auto-clicker for Buyfriend.Moe notifications
 // @author       CandiceJoy
 // @match        https://buyfriend.moe/search?search=https://www.amiami.com/eng/detail/?*

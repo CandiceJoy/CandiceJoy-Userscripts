@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AmiAmi Search Filter
 // @namespace    http://candicejoy.com/
-// @version      1.1
+// @version      1.2
 // @description  Search assistant for AmiAmi
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/search/list/*
@@ -10,12 +10,11 @@
 // @grant              GM_setValue
 // @require      http://code.jquery.com/jquery-3.4.1.min.js
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
+// @require https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/src/libs/Config.js
 // @if BUILD_TYPE="Dev"
 // @require file:///* @echo PATH*/AmiAmi-SearchFilter.user.js
-// @require file:///* @echo PATH*/src/libs/Config.js
 // @endif
 // @if BUILD_TYPE="Prod"
-// @require https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/src/libs/Config.js
 // @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
 // @endif
