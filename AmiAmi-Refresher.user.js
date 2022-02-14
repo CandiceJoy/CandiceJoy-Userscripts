@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         AmiAmi Refresher
 // @namespace    http://candicejoy.com/
-// @version      1.2
+// @version      1.3
 // @description  AmiAmi Refresher / Auto-Add-To-Cart
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/detail/*
@@ -17,26 +17,39 @@
     "use strict";
     //--== User Editable ==--
     const currency = "usd";
-    const refreshSeconds = 15; //seconds
+    const refreshSeconds = 1500; //seconds
     //--== End User Editable ==--
-    const buttonSelector = "button.btn-cart[style=\"\"]";
+    const buttonSelector = "button.btn-cart:not([style]), button.btn-cart[style='']";
     const priceSelector = ".item-detail__price_selling-price";
     const priceThreshold = 10000;
     const refreshTimer = refreshSeconds * 1000;
     const timeout = setTimeout(function () {
         location.reload();
     }, refreshTimer);
+    const observer = new MutationObserver(observerFunc);
+    const body = document.querySelector("body");
+    const observerConfig = {
+        childList: true,
+        subtree: true,
+        attributes: true
+    };
+    if (body !== null) {
+        observer.observe(body, observerConfig);
+    }
     function jancodeLink() {
-        //console.log(nodes);
         const ele = $(document)
             .find(".item-about__data :contains('JAN code')")
             .next(".item-about__data-text");
         if (ele.length > 0) {
             const jancode = ele.text();
-            if (jancode !== undefined && jancode !== null && jancode.trim() !== "") {
+            if (jancode && jancode.trim() !== "") {
                 const url = `https://myfigurecollection.net/browse.v4.php?keywords=${jancode}`;
-                $(ele).html(`<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>`);
+                ele.empty();
+                ele.append(`<a href="javascript: window.open('${url}', '_blank').focus();">${jancode}</a>`);
                 return true;
+            }
+            else {
+                return false;
             }
         }
         return false;
@@ -46,18 +59,22 @@
     }
     function cartButton() {
         const cartButton = $(document).find(buttonSelector);
-        if (cartButton !== undefined && cartButton !== null) {
-            if (getPrice() > priceThreshold) {
-                clearTimeout(timeout);
-                console.log("Price too high, not auto-clicking");
+        let clicked = false;
+        cartButton.each(function () {
+            const text = $(this).text();
+            if (text.toLowerCase().includes("cart")) {
+                if (getPrice() > priceThreshold) {
+                    clearTimeout(timeout);
+                    console.log("Price too high, not auto-clicking");
+                }
+                else {
+                    console.log("CLICK");
+                    $(cartButton).trigger("click");
+                }
+                clicked = true;
             }
-            else {
-                console.log("CLICK");
-                $(cartButton).click();
-            }
-            return true;
-        }
-        return false;
+        });
+        return clicked;
     }
     function currencyConversion() {
         $.ajax(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json`)
@@ -72,7 +89,8 @@
             }
             const newPrice = parseFloat(conversionFactor) * getPrice();
             const formatter = new Intl.NumberFormat("en-US", {
-                style: "currency", currency: currency.toUpperCase()
+                style: "currency",
+                currency: currency.toUpperCase()
             });
             const finalPrice = formatter.format(newPrice);
             if (finalPrice !== undefined) {
@@ -80,12 +98,9 @@
             }
         });
     }
-    const observerConfig = {
-        childList: true, subtree: true, attributes: true
-    };
+    let done1 = false;
+    let done2 = false;
     function observerFunc(mutations) {
-        let done1 = false;
-        let done2 = false;
         mutations.forEach(() => {
             if (done1 && done2) {
                 return;
@@ -102,11 +117,4 @@
             }
         });
     }
-    const observer = new MutationObserver(observerFunc);
-    (function () {
-        const body = document.querySelector("body");
-        if (body !== null) {
-            observer.observe(body, observerConfig);
-        }
-    })();
 })();
