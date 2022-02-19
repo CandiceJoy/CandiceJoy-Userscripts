@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AmiAmi Refresher
 // @namespace    http://candicejoy.com/
-// @version      1.3
+// @version      1.4
 // @description  AmiAmi Refresher / Auto-Add-To-Cart
 // @author       CandiceJoy
 // @match        https://www.amiami.com/eng/detail/*
@@ -20,7 +20,7 @@
 	const refreshSeconds: number = 1500; //seconds
 	//--== End User Editable ==--
 
-	const buttonSelector: string = "button.btn-cart:not([style]), button.btn-cart[style='']";
+	const buttonSelector: string = ".btn-cart:not([style]), .btn-cart[style='']";
 	const priceSelector: string = ".item-detail__price_selling-price";
 
 	const priceThreshold: number = 10000;
@@ -79,8 +79,9 @@
 
 	function cartButton(): boolean
 	{
+		//debugger;
 		const cartButton: JQuery = $(document).find(buttonSelector);
-		let clicked: boolean = false;
+		let done: boolean = false;
 
 		cartButton.each(function(): void
 		                   {
@@ -98,11 +99,12 @@
 					                   console.log("CLICK");
 					                   $(cartButton).trigger("click");
 				                   }
-				                   clicked = true;
 			                   }
+
+							   done = true;
 		                   });
 
-		return clicked;
+		return done;
 	}
 
 	function currencyConversion(): void

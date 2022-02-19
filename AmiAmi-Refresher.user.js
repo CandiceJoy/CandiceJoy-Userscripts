@@ -19,7 +19,7 @@
     const currency = "usd";
     const refreshSeconds = 1500; //seconds
     //--== End User Editable ==--
-    const buttonSelector = "button.btn-cart:not([style]), button.btn-cart[style='']";
+    const buttonSelector = ".btn-cart:not([style]), .btn-cart[style='']";
     const priceSelector = ".item-detail__price_selling-price";
     const priceThreshold = 10000;
     const refreshTimer = refreshSeconds * 1000;
@@ -58,8 +58,9 @@
         return parseInt($(priceSelector).text().replace("JPY", "").replace(",", ""));
     }
     function cartButton() {
+        //debugger;
         const cartButton = $(document).find(buttonSelector);
-        let clicked = false;
+        let done = false;
         cartButton.each(function () {
             const text = $(this).text();
             if (text.toLowerCase().includes("cart")) {
@@ -71,10 +72,10 @@
                     console.log("CLICK");
                     $(cartButton).trigger("click");
                 }
-                clicked = true;
             }
+            done = true;
         });
-        return clicked;
+        return done;
     }
     function currencyConversion() {
         $.ajax(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/jpy/${currency}.json`)
