@@ -8,7 +8,9 @@
 	"sourceType" : "script"
   },
   "env"           : {
-	"es6": true
+	"es6": true,
+	"node": true,
+	"browser": true
   },
   "ignorePatterns": "*.user.js"
 }

@@ -1,20 +1,9 @@
-// ==UserScript==
-// @name         AmiAmi Refresher
-// @namespace    http://candicejoy.com/
-// @version      1.4
-// @description  AmiAmi Refresher / Auto-Add-To-Cart
-// @author       CandiceJoy
-// @match        https://www.amiami.com/eng/detail/*
-// @icon         https://www.google.com/s2/favicons?domain=amiami.com
-// @grant        none
-// @require      http://code.jquery.com/jquery-3.4.1.min.js
-// @downloadURL https://cdn.jsdelivr.net/gh/CandiceJoy/CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
-// @supportURL https://github.com/CandiceJoy/CandiceJoy-Userscripts/issues
-// @run-at document-idle
-// ==/UserScript==
+
+
 (function(): void
 {
 	"use strict";
+	import("jQuery");
 	//--== User Editable ==--
 	const currency: string = "usd";
 	const refreshSeconds: number = 1500; //seconds

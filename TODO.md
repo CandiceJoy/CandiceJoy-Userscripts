@@ -1,3 +1,4 @@
 # TODO
 
-1. Live a happy and peaceful life!  Also, improve your userscripts :P
+1. Fix bundle sizes?
+2. Test more!

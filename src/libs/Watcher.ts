@@ -1,4 +1,4 @@
-class Watcher
+export class Watcher
 {
 	private readonly options: object;
 	private observer: MutationObserver;

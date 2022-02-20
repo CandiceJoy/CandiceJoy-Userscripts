@@ -1,4 +1,3 @@
-/* globals GM_config */
 /// <reference types="../types/GM_config"/>
 
 const allowedProperties: object = {
@@ -21,7 +20,7 @@ function checkProperty(type: string, key: string): void
 	}
 }
 
-class Config
+export class Config
 {
 	public document: Document;
 	public window: Window;

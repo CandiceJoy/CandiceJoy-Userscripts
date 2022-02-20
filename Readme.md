@@ -59,7 +59,7 @@ Firefox: [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemon
 
 ----
 
-1. Install gulp and all reqs from package.json
-2. Run the task to build the files you want.
-3. Copy the header from dev/ into your Tampermonkey, making sure that it's allowed to use file:// and it will always use
+1. Install webpack and all reqs from package.json
+2. Run the "build" script in package.json
+3. Copy the header from ./*.dev.user.js into your Tampermonkey, making sure that it's allowed to use file:// and it will always use
    the local live built version of the script.

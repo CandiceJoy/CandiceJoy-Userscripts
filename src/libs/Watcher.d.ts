@@ -1,4 +1,4 @@
-declare class Watcher {
+export declare class Watcher {
     private readonly options;
     private observer;
     private callback;

@@ -2,19 +2,15 @@
   "extends"        : "../../tsconfig.json",
   "compilerOptions": {
 	"outDir"                          : "./",
-	"module"                          : "umd",
+	"module"                          : "esnext",
 	"declaration"                     : true,
 	"emitDeclarationOnly"             : false,
 	"typeRoots"                       : [
 	  "../../node_modules/@types",
 	  "../types"
-	],
-	"baseUrl"                         : "./",
-	"paths"                           : {
-	  "*": [
-		"../../node_modules/*"
-	  ]
-	},
+	]
+	//"baseUrl"                         : "./",
+
   },
   "files"          : [
 	"Config.ts",
