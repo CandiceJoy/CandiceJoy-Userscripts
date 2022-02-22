@@ -72,38 +72,6 @@ const configTemplate = {
 	}
 };
 
-let init = lodashClonedeep(configTemplate);
-init.plugins = [new RemovePlugin({
-	                                 before: {
-		                                 test       : [{
-			                                 folder      : '.', method: (absoluteItemPath) =>
-			                                 {
-				                                 return new RegExp(/\.js$/, 'm').test(absoluteItemPath);
-			                                 }, recursive: false
-		                                 }, {
-			                                 folder      : '.', method: (absoluteItemPath) =>
-			                                 {
-				                                 return new RegExp(/\.LICENSE.txt$/, 'm').test(absoluteItemPath);
-			                                 }, recursive: false
-		                                 }, {
-			                                 folder      : './src', method: (absoluteItemPath) =>
-			                                 {
-				                                 return new RegExp(/\.js$/, 'm').test(absoluteItemPath);
-			                                 }, recursive: true
-		                                 }, {
-			                                 folder      : './src/libs', method: (absoluteItemPath) =>
-			                                 {
-				                                 return new RegExp(/\.d.ts$/, 'm').test(absoluteItemPath);
-			                                 }, recursive: true
-		                                 }], exclude: ['webpack.config.js']
-	                                 }
-                                 })];
-init["entry"] = {"Config": "./src/libs/Config.ts", "Watcher": "./src/libs/Config.ts"};
-init.output.path = __dirname + "/src/libs";
-init.output.filename = "[name].js";
-init.output.publicPath = publicBaseUrl + "src/libs/[name].js";
-exportList.push(init);
-
 for(let i = 0; i < scripts.length; i++)
 {
 	const sourceFile = scripts[i].file;
