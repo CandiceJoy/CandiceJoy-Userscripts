@@ -11,5 +11,5 @@
 // @run-at      document-end
 // @namespace   https://candicejoy.com
 // @source      git+https://github.com/CandiceJoy/CandiceJoy-Userscripts.git
-// @require     C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
+// @require     file://C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts/AmiAmi-SearchFilter.user.js
 // ==/UserScript==

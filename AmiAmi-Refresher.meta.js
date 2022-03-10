@@ -10,5 +10,5 @@
 // @run-at      document-end
 // @namespace   https://candicejoy.com
 // @source      git+https://github.com/CandiceJoy/CandiceJoy-Userscripts.git
-// @require     C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
+// @require     file://C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts/AmiAmi-Refresher.user.js
 // ==/UserScript==

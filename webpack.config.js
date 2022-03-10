@@ -60,6 +60,17 @@ scripts.push({
 	}
              });
 
+scripts.push({
+	             file: "./src/AmiAmi-CartNotifier.ts", header: {
+		name       : "AmiAmi Cart Notifier",
+		version    : "1.0",
+		match      : ["https://www.amiami.com/eng/cart*"],
+		description: "Notify you when something is added to your cart",
+		icon       : "https://www.google.com/s2/favicons?domain=amiami.com",
+		'run-at'   : 'document-end'
+	}
+             });
+
 // -----===== Edit Me End =====-----
 
 const configTemplate = {
@@ -68,7 +79,7 @@ const configTemplate = {
 	}, output : {
 		filename: "", path: __dirname + "/", publicPath: publicBaseUrl + "[name].user.js"
 	}, resolve: {
-		modules:["node_modules","src/libs4"],extensions: ['.js', '.jsx', '.ts', '.tsx']
+		modules:["node_modules","src/libs"],extensions: ['.js', '.jsx', '.ts', '.tsx']
 	}
 };
 
@@ -89,7 +100,7 @@ for(let i = 0; i < scripts.length; i++)
 	};
 
 	options["proxyScript"] = {
-		baseUrl: __dirname, filename: '[basename].dev.user.js', enable: true
+		baseUrl: "file://"+__dirname, filename: '[basename].dev.user.js', enable: true
 	};
 
 	let plugins = [];

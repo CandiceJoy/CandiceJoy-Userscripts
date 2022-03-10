@@ -10,5 +10,5 @@
 // @run-at      document-end
 // @namespace   https://candicejoy.com
 // @source      git+https://github.com/CandiceJoy/CandiceJoy-Userscripts.git
-// @require     C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
+// @require     file://C:\Users\Candice\WebstormProjects\CandiceJoy-Userscripts/MFC-MarkAllRead.user.js
 // ==/UserScript==
